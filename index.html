@@ -129,12 +129,12 @@
   .venue-tag .dot{ width:6px; height:6px; border-radius:50%; background:var(--c3); }
 
   h1.title{
-    font-size:clamp(32px, 4.6vw, 54px);
-    line-height:1.08;
+    font-size:clamp(28px, 3.6vw, 42px);
+    line-height:1.15;
     font-weight:600;
     letter-spacing:-0.01em;
     margin:0 0 8px;
-    max-width:920px;
+    max-width:1000px;
   }
   h1.title .small{
     font-family:'Space Grotesk', sans-serif;
@@ -441,13 +441,12 @@
     <span class="venue-tag"><span class="dot"></span>IEEE Robotics and Automation Letters &middot; Under Review</span>
 
     <h1 class="title">
-      <span class="small">Semantic Anchored Correspondence</span>
-      <em>SemAnCorr</em>: Zero-Shot Manipulation Skill Transfer via Dense Correspondence
+      <em>SemAnCorr</em>: <em>Sem</em>antic <em>An</em>chored <em>Corr</em>espondence for Zero-Shot Manipulation Skill Transfer
     </h1>
 
     <div class="authors">
       Anonymous Author(s)
-      <span class="note">Author names and affiliations withheld for double-blind review &mdash; replace this block with your author list, links, and footnotes once camera-ready.</span>
+      <span class="note">Author names and affiliations withheld for double-blind review.</span>
     </div>
 
     <div class="links">
@@ -470,7 +469,7 @@
     </div>
 
     <figure class="teaser-frame">
-      <img src="assets/images/teaser.jpg" alt="SemAnCorr produces dense vertex-level correspondence across geometrically diverse object instances, enabling zero-shot transfer of manipulation skills such as pouring, wiping, and grasping.">
+      <img src="assets/images/teaser.png" alt="SemAnCorr produces dense vertex-level correspondence across geometrically diverse object instances, enabling zero-shot transfer of manipulation skills such as pouring, wiping, and grasping.">
     </figure>
     <p class="teaser-cap"><span class="caption-label">Fig. 1</span>SemAnCorr computes dense, vertex-level correspondence across geometrically diverse object instances that respects semantically similar parts while smoothly spanning the object surface (left). The resulting correspondence transfers a single demonstration to previously unseen objects that share functional structure but differ in geometry (right).</p>
   </div>
@@ -555,7 +554,7 @@
         </div>
       </div>
       <figure class="fig-card">
-        <img src="assets/images/pipeline.jpg" alt="SemAnCorr pipeline: multi-view rendering and patch embedding, vertex embedding and clustering, pose optimization and anchor selection, sparse anchor correspondence constraining a functional map, producing dense correspondence.">
+        <img src="assets/images/pipeline.png" alt="SemAnCorr pipeline: multi-view rendering and patch embedding, vertex embedding and clustering, pose optimization and anchor selection, sparse anchor correspondence constraining a functional map, producing dense correspondence.">
         <div class="cap">
           <p style="margin:0; font-size:13px; color:var(--text-faint);"><span class="caption-label">Fig. 2</span>Semantic features are extracted and lifted into 3D to form clusters (red); corresponding anchors are selected via joint semantic&#8209;geometric optimization (green); anchors constrain a functional map (blue) to produce smooth, dense correspondence.</p>
         </div>
@@ -604,11 +603,11 @@
 
     <div class="grid-2" style="margin-top:56px; align-items:start;">
       <figure class="fig-card">
-        <img src="assets/images/inner-category.jpg" alt="SemAnCorr inner-category correspondence across scissors, pliers, eyeglasses, and other object pairs shown as smooth rainbow gradients.">
+        <img src="assets/images/inner-category.png" alt="SemAnCorr inner-category correspondence across scissors, pliers, eyeglasses, and other object pairs shown as smooth rainbow gradients.">
         <div class="cap"><p style="margin:0; font-size:13px; color:var(--text-faint);"><span class="caption-label">Fig. 3a</span>Within&#8209;category correspondence. Top row: source coloring. Bottom row: each vertex takes the corresponding point's color from the source.</p></div>
       </figure>
       <figure class="fig-card">
-        <img src="assets/images/baseline-comparison.jpg" alt="Comparison of SemAnCorr against FM-WKS, Robo-ABC, DenseMatcher, and D3Fields baselines, showing smoother and more coherent color transfer.">
+        <img src="assets/images/baseline-comparison.png" alt="Comparison of SemAnCorr against FM-WKS, Robo-ABC, DenseMatcher, and D3Fields baselines, showing smoother and more coherent color transfer.">
         <div class="cap"><p style="margin:0; font-size:13px; color:var(--text-faint);"><span class="caption-label">Fig. 3b</span>Baseline comparison. Source coloring on the left; corresponded colorings on the right for each method.</p></div>
       </figure>
     </div>
@@ -639,12 +638,12 @@
         </div>
         <p class="table-note">Table&nbsp;III &mdash; Cross&#8209;category semantic accuracy (sAcc &plusmn; std, %).</p>
         <figure style="margin-top:28px;">
-          <img src="assets/images/cross-category.jpg" alt="Cross-category correspondence from scissors to pliers and kettle to bottle, shown as smooth rainbow gradients.">
+          <img src="assets/images/cross-category.png" alt="Cross-category correspondence from scissors to pliers and kettle to bottle, shown as smooth rainbow gradients.">
           <figcaption><span class="caption-label">Fig. 4</span>Cross&#8209;category correspondence: Scissors &rarr; Pliers (left), Kettle &rarr; Bottle (right).</figcaption>
         </figure>
       </div>
       <figure class="fig-card">
-        <img src="assets/images/anchor-confidence.jpg" alt="Category-level anchor confidence matrix, showing highest confidence along the diagonal and elevated confidence between functionally related categories such as containers and hand tools.">
+        <img src="assets/images/anchor-confidence.png" alt="Category-level anchor confidence matrix, showing highest confidence along the diagonal and elevated confidence between functionally related categories such as containers and hand tools.">
         <div class="cap"><p style="margin:0; font-size:13px; color:var(--text-faint);"><span class="caption-label">Fig. 5</span>Category&#8209;level anchor confidence. Within&#8209;category pairs (diagonal) score highest; functionally related categories &mdash; containers, hand tools, appliances &mdash; score relatively higher than unrelated ones, even without any comparable baseline metric.</p></div>
       </figure>
     </div>
@@ -678,7 +677,7 @@
         </div>
       </div>
       <figure class="fig-card">
-        <img src="assets/images/ablation.jpg" alt="Ablation visualization: correspondence without semantic clustering, without anchor selection, without functional map, and the full SemAnCorr pipeline.">
+        <img src="assets/images/ablation.png" alt="Ablation visualization: correspondence without semantic clustering, without anchor selection, without functional map, and the full SemAnCorr pipeline.">
         <div class="cap"><p style="margin:0; font-size:13px; color:var(--text-faint);"><span class="caption-label">Fig. 6</span>Source object (left) and target correspondence under each ablation: w/o semantic clustering, w/o anchor selection, w/o functional map, and the full pipeline.</p></div>
       </figure>
     </div>
@@ -694,7 +693,7 @@
     <p class="wide">Five kinesthetically demonstrated skills &mdash; peeling, opening, pouring, twisting, and cutting &mdash; are transferred zero&#8209;shot to unseen target objects using only the computed dense correspondence. A contact keyframe (end&#8209;effector pose + contact region) and relative motion segments are transferred via Procrustes alignment to the corresponding region on the target.</p>
 
     <figure style="margin-top:30px;">
-      <img src="assets/images/real-world.jpg" alt="Real-world manipulation transfer across five tasks: banana peeling, pen opening, kettle pouring, bottle twisting, and scissor cutting, showing observations, correspondences, and execution key frames.">
+      <img src="assets/images/real-world.png" alt="Real-world manipulation transfer across five tasks: banana peeling, pen opening, kettle pouring, bottle twisting, and scissor cutting, showing observations, correspondences, and execution key frames.">
       <figcaption><span class="caption-label">Fig. 7</span>For each task, a skill demonstrated on a source object (left) is transferred to a semantically related target object (right) via the computed dense correspondence (second row); remaining rows show key frames of the source demonstration and the transferred execution.</figcaption>
     </figure>
 
@@ -709,11 +708,11 @@
 
     <div class="grid-2" style="margin-top:48px;">
       <figure class="fig-card">
-        <img src="assets/images/realworld-correspondence.jpg" alt="SemAnCorr real-world object correspondence for all five tasks.">
+        <img src="assets/images/realworld-correspondence.png" alt="SemAnCorr real-world object correspondence for all five tasks.">
         <div class="cap"><p style="margin:0; font-size:13px; color:var(--text-faint);"><span class="caption-label">Fig. 8a</span>SemAnCorr correspondence on real&#8209;world object pairs, Tasks 1&ndash;5.</p></div>
       </figure>
       <figure class="fig-card">
-        <img src="assets/images/d3fields-failure.jpg" alt="D3Fields failure cases on Task 3 and Task 4, showing spatially incoherent correspondence leading to incorrect local frames.">
+        <img src="assets/images/d3fields-failure.png" alt="D3Fields failure cases on Task 3 and Task 4, showing spatially incoherent correspondence leading to incorrect local frames.">
         <div class="cap"><p style="margin:0; font-size:13px; color:var(--text-faint);"><span class="caption-label">Fig. 8b</span>D3Fields fails on Tasks 3 &amp; 4: spatially incoherent correspondence yields incorrect local frames, causing task failure.</p></div>
       </figure>
     </div>
