@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SemAnCorr: Semantic Anchored Correspondence for Zero-Shot Manipulation Skill Transfer</title>
+<meta name="description" content="SemAnCorr establishes dense, semantically-anchored correspondence across geometrically diverse objects for zero-shot robot manipulation skill transfer.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg: #12141a;
+    --surface: #191c24;
+    --surface-2: #20242e;
+    --line: #2a2e3a;
+    --text: #e9e7e0;
+    --text-dim: #9aa1b2;
+    --text-faint: #656c7d;
+
+    --c1: #6e5de7; /* violet  */
+    --c2: #3e8ef7; /* blue    */
+    --c3: #22c7b5; /* teal    */
+    --c4: #f5b942; /* amber   */
+    --c5: #f2664a; /* coral   */
+    --spectral: linear-gradient(90deg, var(--c1), var(--c2), var(--c3), var(--c4), var(--c5));
+
+    --accent: #2fbfae;
+    --accent-soft: rgba(47,191,174,0.14);
+
+    --radius: 10px;
+    --maxw: 1120px;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Source Serif 4', Georgia, serif;
+    font-size:17px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1,h2,h3, .display, nav, .eyebrow, .pill, .stat-num, .tag, .footer-mark{
+    font-family:'Space Grotesk', sans-serif;
+  }
+
+  code, .mono, table, .authors, .method-step .num, .links, .caption-label{
+    font-family:'JetBrains Mono', monospace;
+  }
+
+  a{ color:var(--text); }
+  img{ max-width:100%; display:block; border-radius:6px; }
+
+  .wrap{
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding:0 28px;
+  }
+
+  /* ---------- top nav ---------- */
+  .topnav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(18,20,26,0.86);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .topnav .wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    height:56px;
+  }
+  .brand{
+    font-weight:600; font-size:15px; letter-spacing:0.02em;
+    text-decoration:none; color:var(--text);
+    display:flex; align-items:center; gap:8px;
+  }
+  .brand .dot{
+    width:9px; height:9px; border-radius:50%;
+    background:var(--spectral);
+  }
+  .navlinks{ display:flex; gap:26px; }
+  .navlinks a{
+    font-size:13.5px; text-decoration:none; color:var(--text-dim);
+    letter-spacing:0.02em;
+    padding-bottom:3px;
+    border-bottom:1px solid transparent;
+    transition:color .15s ease, border-color .15s ease;
+  }
+  .navlinks a:hover{ color:var(--text); border-color:var(--c3); }
+
+  /* ---------- signature spectral rule ---------- */
+  .rule{
+    height:3px; width:100%;
+    background:var(--spectral);
+    border:none;
+  }
+  .rule.thin{ height:2px; opacity:0.85; }
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative;
+    padding:78px 0 54px;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      radial-gradient(ellipse 900px 480px at 20% -10%, rgba(110,93,231,0.20), transparent 60%),
+      radial-gradient(ellipse 900px 480px at 85% 0%, rgba(34,199,181,0.16), transparent 60%);
+    pointer-events:none;
+  }
+  .venue-tag{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px; letter-spacing:0.06em; text-transform:uppercase;
+    color:var(--text-dim);
+    background:var(--surface);
+    border:1px solid var(--line);
+    padding:6px 12px; border-radius:100px;
+    margin-bottom:26px;
+  }
+  .venue-tag .dot{ width:6px; height:6px; border-radius:50%; background:var(--c3); }
+
+  h1.title{
+    font-size:clamp(32px, 4.6vw, 54px);
+    line-height:1.08;
+    font-weight:600;
+    letter-spacing:-0.01em;
+    margin:0 0 8px;
+    max-width:920px;
+  }
+  h1.title .small{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:500;
+    color:var(--text-dim);
+    font-size:0.46em;
+    display:block;
+    letter-spacing:0.01em;
+    margin-bottom:10px;
+  }
+  h1.title em{
+    font-style:normal;
+    background:var(--spectral);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+
+  .authors{
+    margin:26px 0 6px;
+    font-size:15px;
+    color:var(--text-dim);
+    line-height:1.9;
+  }
+  .authors .note{
+    display:block;
+    font-family:'Source Serif 4', serif;
+    font-style:italic;
+    color:var(--text-faint);
+    font-size:14px;
+    margin-top:4px;
+  }
+
+  .links{ display:flex; flex-wrap:wrap; gap:10px; margin:30px 0 46px; }
+  .pill{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:13.5px; font-weight:500;
+    color:var(--text);
+    background:var(--surface);
+    border:1px solid var(--line);
+    padding:10px 18px; border-radius:100px;
+    text-decoration:none;
+    transition:border-color .15s ease, transform .15s ease, background .15s ease;
+  }
+  .pill:hover{ border-color:var(--accent); background:var(--surface-2); transform:translateY(-1px); }
+  .pill.primary{ background:var(--accent); color:#0c1512; border-color:var(--accent); font-weight:600; }
+  .pill.primary:hover{ background:#39d4c1; }
+  .pill svg{ width:15px; height:15px; }
+
+  .teaser-frame{
+    border-radius:14px;
+    overflow:hidden;
+    border:1px solid var(--line);
+    box-shadow:0 30px 80px -30px rgba(0,0,0,0.6);
+  }
+  .teaser-frame img{ border-radius:0; width:100%; }
+  .teaser-cap{
+    margin-top:14px;
+    font-size:13.5px;
+    color:var(--text-faint);
+    line-height:1.6;
+  }
+
+  /* ---------- sections ---------- */
+  section{ padding:74px 0; border-top:1px solid var(--line); }
+  section.hero{ border-top:none; }
+
+  .eyebrow{
+    display:flex; align-items:center; gap:12px;
+    font-size:12px; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--text-faint);
+    margin-bottom:16px;
+  }
+  .eyebrow .seg{
+    width:26px; height:2px; background:var(--spectral);
+  }
+
+  h2.h{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:clamp(24px, 3vw, 32px);
+    font-weight:600;
+    letter-spacing:-0.01em;
+    margin:0 0 22px;
+  }
+
+  .lede{
+    font-size:19px;
+    line-height:1.75;
+    color:var(--text);
+    max-width:820px;
+  }
+  p{ color:var(--text-dim); max-width:760px; }
+  section p.wide{ max-width:none; }
+
+  .grid-2{ display:grid; grid-template-columns:1.1fr 0.9fr; gap:48px; align-items:start; }
+  .grid-3{ display:grid; grid-template-columns:repeat(3, 1fr); gap:18px; }
+
+  figure{ margin:0; }
+  figcaption{
+    margin-top:12px;
+    font-size:13.5px;
+    color:var(--text-faint);
+    line-height:1.65;
+  }
+  .caption-label{
+    color:var(--text-dim);
+    font-size:12px;
+    margin-right:6px;
+  }
+
+  /* method steps */
+  .method-steps{
+    display:grid; gap:14px;
+    margin-top:28px;
+  }
+  .method-step{
+    display:grid; grid-template-columns:44px 1fr;
+    gap:16px;
+    padding:18px 0;
+    border-top:1px solid var(--line);
+  }
+  .method-step:first-child{ border-top:none; padding-top:0; }
+  .method-step .num{
+    font-size:13px; color:var(--text-faint);
+    padding-top:3px;
+  }
+  .method-step h3{
+    font-size:16px; margin:0 0 6px; font-weight:600; color:var(--text);
+  }
+  .method-step p{ margin:0; font-size:14.5px; color:var(--text-dim); }
+
+  /* stat row */
+  .stats{
+    display:grid; grid-template-columns:repeat(4, 1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    overflow:hidden;
+    margin:34px 0 0;
+  }
+  .stat{
+    background:var(--surface);
+    padding:26px 22px;
+  }
+  .stat-num{
+    font-size:30px; font-weight:600;
+    background:var(--spectral);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    line-height:1;
+  }
+  .stat-label{
+    margin-top:10px; font-size:12.5px; color:var(--text-dim);
+    line-height:1.5;
+  }
+
+  /* tables */
+  .table-wrap{
+    overflow-x:auto;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    margin-top:20px;
+  }
+  table{
+    width:100%; border-collapse:collapse;
+    font-size:13px;
+    min-width:640px;
+  }
+  thead th{
+    text-align:left;
+    padding:13px 16px;
+    background:var(--surface-2);
+    color:var(--text-dim);
+    font-weight:500;
+    border-bottom:1px solid var(--line);
+    white-space:nowrap;
+  }
+  tbody td{
+    padding:12px 16px;
+    border-bottom:1px solid var(--line);
+    color:var(--text-dim);
+    white-space:nowrap;
+  }
+  tbody tr:last-child td{ border-bottom:none; }
+  tbody tr.best td{ color:var(--text); }
+  td.best-val{ color:var(--c3); font-weight:600; }
+  tr.ours td{ background:rgba(47,191,174,0.06); }
+  .table-note{ font-size:12.5px; color:var(--text-faint); margin-top:10px; }
+
+  /* image cards */
+  .fig-card{
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    overflow:hidden;
+    background:var(--surface);
+  }
+  .fig-card img{ border-radius:0; }
+  .fig-card .cap{ padding:16px 18px; }
+
+  /* ablation cross list */
+  .cross-note{
+    display:flex; gap:22px; flex-wrap:wrap;
+    margin-top:22px;
+  }
+  .cross-note div{
+    flex:1; min-width:200px;
+    padding:16px 18px;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    font-size:13.5px; color:var(--text-dim);
+  }
+  .cross-note strong{ color:var(--text); display:block; margin-bottom:4px; font-family:'Space Grotesk',sans-serif; font-size:13px;}
+
+  /* tasks */
+  .task-list{ display:grid; gap:10px; margin-top:24px; }
+  .task-row{
+    display:grid; grid-template-columns:30px 1fr auto;
+    align-items:center; gap:16px;
+    padding:14px 18px;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:8px;
+    font-size:14px;
+  }
+  .task-row .n{ color:var(--text-faint); font-family:'JetBrains Mono',monospace; font-size:12px; }
+  .task-row .desc{ color:var(--text-dim); }
+  .task-row .score{ display:flex; gap:18px; font-family:'JetBrains Mono',monospace; font-size:12.5px; }
+  .task-row .score span{ color:var(--text-faint); }
+  .task-row .score b{ color:var(--c3); font-weight:600; }
+
+  /* bibtex */
+  .bib{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:26px 28px;
+    position:relative;
+    margin-top:24px;
+  }
+  .bib pre{
+    margin:0; white-space:pre-wrap; word-break:break-word;
+    font-family:'JetBrains Mono', monospace;
+    font-size:12.8px; line-height:1.7; color:var(--text-dim);
+  }
+  .copy-btn{
+    position:absolute; top:18px; right:18px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11.5px; letter-spacing:0.04em;
+    background:var(--surface-2); color:var(--text-dim);
+    border:1px solid var(--line); border-radius:6px;
+    padding:7px 12px; cursor:pointer;
+    transition:all .15s ease;
+  }
+  .copy-btn:hover{ color:var(--text); border-color:var(--accent); }
+
+  /* footer */
+  footer{
+    padding:44px 0 60px;
+    border-top:1px solid var(--line);
+  }
+  footer .wrap{
+    display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap; gap:16px;
+  }
+  .footer-mark{ font-size:13px; color:var(--text-faint); }
+  .footer-links{ display:flex; gap:20px; }
+  .footer-links a{ font-size:13px; color:var(--text-faint); text-decoration:none; }
+  .footer-links a:hover{ color:var(--text-dim); }
+
+  @media (max-width: 860px){
+    .grid-2{ grid-template-columns:1fr; }
+    .grid-3{ grid-template-columns:1fr; }
+    .stats{ grid-template-columns:1fr 1fr; }
+    .navlinks{ display:none; }
+    section{ padding:56px 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    .pill{ transition:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topnav">
+  <div class="wrap">
+    <a class="brand" href="#top"><span class="dot"></span>SemAnCorr</a>
+    <nav class="navlinks">
+      <a href="#abstract">Abstract</a>
+      <a href="#method">Method</a>
+      <a href="#results">Results</a>
+      <a href="#generalization">Generalization</a>
+      <a href="#realworld">Real&#8209;World</a>
+      <a href="#bibtex">BibTeX</a>
+    </nav>
+  </div>
+</div>
+
+<a id="top"></a>
+<section class="hero">
+  <div class="wrap">
+    <span class="venue-tag"><span class="dot"></span>IEEE Robotics and Automation Letters &middot; Under Review</span>
+
+    <h1 class="title">
+      <span class="small">Semantic Anchored Correspondence</span>
+      <em>SemAnCorr</em>: Zero-Shot Manipulation Skill Transfer via Dense Correspondence
+    </h1>
+
+    <div class="authors">
+      Anonymous Author(s)
+      <span class="note">Author names and affiliations withheld for double-blind review &mdash; replace this block with your author list, links, and footnotes once camera-ready.</span>
+    </div>
+
+    <div class="links">
+      <a class="pill primary" href="#" data-role="paper">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+        Paper (PDF)
+      </a>
+      <a class="pill" href="#" data-role="code">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
+        Code
+      </a>
+      <a class="pill" href="#" data-role="video">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Video
+      </a>
+      <a class="pill" href="#" data-role="data">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg>
+        Benchmark
+      </a>
+    </div>
+
+    <figure class="teaser-frame">
+      <img src="assets/images/teaser.jpg" alt="SemAnCorr produces dense vertex-level correspondence across geometrically diverse object instances, enabling zero-shot transfer of manipulation skills such as pouring, wiping, and grasping.">
+    </figure>
+    <p class="teaser-cap"><span class="caption-label">Fig. 1</span>SemAnCorr computes dense, vertex-level correspondence across geometrically diverse object instances that respects semantically similar parts while smoothly spanning the object surface (left). The resulting correspondence transfers a single demonstration to previously unseen objects that share functional structure but differ in geometry (right).</p>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section id="abstract">
+  <div class="wrap">
+    <div class="eyebrow"><span class="seg"></span>Abstract</div>
+    <p class="lede">
+      Transferring manipulation skills across object instances that share functionality but differ in geometry remains a fundamental challenge in robot learning. While recent correspondence methods leverage dense visual descriptors and 3D feature fields, nearest&#8209;neighbor feature matching often produces spatially incoherent correspondences that fail to recover the local geometric frames required for reliable skill transfer.
+    </p>
+    <p class="lede">
+      We introduce <strong>SemAnCorr</strong>, a training&#8209;free framework that establishes dense correspondence by selecting semantically consistent anchor regions through joint pose&#8209;correspondence optimization and propagating these constraints over the object surface using functional maps. The resulting correspondences preserve both semantic consistency and geometric coherence, enabling object&#8209;centric manipulation skills to transfer across geometrically diverse instances.
+    </p>
+    <p class="lede">
+      We evaluate SemAnCorr on a dense correspondence benchmark built on PartNet&#8209;Mobility, achieving <strong>90.8% semantic accuracy</strong> while substantially improving geometric coherence over existing correspondence and affordance&#8209;transfer baselines. Finally, we show these improvements translate directly into real&#8209;world manipulation performance: using a single demonstration, SemAnCorr enables substantially more reliable zero&#8209;shot manipulation skill transfer to previously unseen objects than existing correspondence methods.
+    </p>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-num">90.8%</div>
+        <div class="stat-label">Mean semantic accuracy across 7 PartNet&#8209;Mobility categories</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">0.40</div>
+        <div class="stat-label">Geometric Coherence Score &mdash; 2&times; the next best baseline</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">1</div>
+        <div class="stat-label">Demonstration needed per skill &mdash; no task&#8209;specific training</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">~6s</div>
+        <div class="stat-label">Per object pair on a single RTX&nbsp;4090</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule thin">
+
+<section id="method">
+  <div class="wrap">
+    <div class="grid-2">
+      <div>
+        <div class="eyebrow"><span class="seg"></span>Method</div>
+        <h2 class="h">Anchor semantics, then let geometry fill in the rest</h2>
+        <p>
+          Semantic correspondence tells a robot <em>where</em> to interact; geometric coherence tells it <em>how</em>. SemAnCorr treats these as complementary constraints on a single dense correspondence rather than as separate problems &mdash; semantically confident regions are anchored first, and a functional map propagates those constraints smoothly across the rest of the surface.
+        </p>
+        <div class="method-steps">
+          <div class="method-step">
+            <div class="num">01</div>
+            <div>
+              <h3>Multi&#8209;view semantic lifting</h3>
+              <p>Renders of each mesh are encoded with pretrained SigLIP2 features, lifted to 3D, and clustered into spatially coherent, semantically consistent part regions.</p>
+            </div>
+          </div>
+          <div class="method-step">
+            <div class="num">02</div>
+            <div>
+              <h3>Joint pose &amp; anchor optimization</h3>
+              <p>Candidate cluster pairs are scored by relative cosine similarity and bilateral margin confidence, then refined by jointly optimizing a rigid alignment against Chamfer&#8209;based geometric compatibility &mdash; resolving cases where semantically similar parts sit in geometrically incompatible poses.</p>
+            </div>
+          </div>
+          <div class="method-step">
+            <div class="num">03</div>
+            <div>
+              <h3>Semantic&#8209;anchored functional map</h3>
+              <p>High&#8209;confidence anchor pairs are hard&#8209;pinned into a functional map over Laplace&#8209;Beltrami spectral bases, then refined with a geometry&#8209;constrained ZoomOut scheme that upsamples the basis while re&#8209;pinning anchors to prevent drift.</p>
+            </div>
+          </div>
+          <div class="method-step">
+            <div class="num">04</div>
+            <div>
+              <h3>Object&#8209;centric skill transfer</h3>
+              <p>A demonstrated skill &mdash; contact keyframes plus relative motion segments &mdash; is transferred by aligning contact regions through the dense correspondence and updating end&#8209;effector poses via Procrustes alignment.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <figure class="fig-card">
+        <img src="assets/images/pipeline.jpg" alt="SemAnCorr pipeline: multi-view rendering and patch embedding, vertex embedding and clustering, pose optimization and anchor selection, sparse anchor correspondence constraining a functional map, producing dense correspondence.">
+        <div class="cap">
+          <p style="margin:0; font-size:13px; color:var(--text-faint);"><span class="caption-label">Fig. 2</span>Semantic features are extracted and lifted into 3D to form clusters (red); corresponding anchors are selected via joint semantic&#8209;geometric optimization (green); anchors constrain a functional map (blue) to produce smooth, dense correspondence.</p>
+        </div>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<hr class="rule thin">
+
+<section id="results">
+  <div class="wrap">
+    <div class="eyebrow"><span class="seg"></span>Quantitative Results</div>
+    <h2 class="h">Within&#8209;category correspondence</h2>
+    <p class="wide">Evaluated on a dense correspondence benchmark built from seven PartNet&#8209;Mobility categories, against functional&#8209;map, 2D semantic, and 3D feature&#8209;field baselines. SemAnCorr leads on semantic accuracy in every category and is the only method that achieves both high continuity <em>and</em> meaningful surface coverage.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Method</th><th>Scissors</th><th>Pliers</th><th>Eyeglasses</th><th>Knife</th><th>Suitcase</th><th>Bottle</th><th>Kettle</th><th>Average</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>FM&#8209;WKS</td><td>58.5 &plusmn; 10.7</td><td>63.7 &plusmn; 16.1</td><td>59.1 &plusmn; 15.1</td><td>34.3 &plusmn; 28.6</td><td>83.8 &plusmn; 25.1</td><td>62.5 &plusmn; 37.1</td><td>79.7 &plusmn; 14.4</td><td>63.1 &plusmn; 15.0</td></tr>
+          <tr><td>DenseMatcher</td><td>71.5 &plusmn; 16.7</td><td>69.4 &plusmn; 17.5</td><td>70.7 &plusmn; 14.8</td><td>63.3 &plusmn; 25.5</td><td>54.6 &plusmn; 28.8</td><td>54.9 &plusmn; 27.8</td><td>71.5 &plusmn; 7.0</td><td>65.1 &plusmn; 7.1</td></tr>
+          <tr><td>Robo&#8209;ABC</td><td>72.9 &plusmn; 9.1</td><td>74.4 &plusmn; 10.9</td><td>62.3 &plusmn; 18.5</td><td>51.9 &plusmn; 26.9</td><td>71.5 &plusmn; 14.8</td><td>46.9 &plusmn; 26.4</td><td>62.6 &plusmn; 6.8</td><td>63.2 &plusmn; 9.9</td></tr>
+          <tr><td>D3Fields</td><td>86.2 &plusmn; 4.3</td><td>88.9 &plusmn; 7.0</td><td>85.4 &plusmn; 7.8</td><td>85.8 &plusmn; 7.9</td><td>83.2 &plusmn; 13.3</td><td>78.9 &plusmn; 7.4</td><td>84.1 &plusmn; 8.1</td><td>84.6 &plusmn; 3.5</td></tr>
+          <tr class="ours best"><td>SemAnCorr (Ours)</td><td class="best-val">88.5 &plusmn; 3.0</td><td class="best-val">94.0 &plusmn; 2.5</td><td class="best-val">93.5 &plusmn; 2.3</td><td class="best-val">90.8 &plusmn; 3.8</td><td class="best-val">92.2 &plusmn; 5.5</td><td class="best-val">89.4 &plusmn; 4.5</td><td>86.9 &plusmn; 9.9</td><td class="best-val">90.8 &plusmn; 2.5</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-note">Table&nbsp;I &mdash; Within&#8209;category semantic accuracy (sAcc &plusmn; std, %). SemAnCorr improves 6.2 points over the strongest baseline, D3Fields.</p>
+
+    <div class="table-wrap" style="margin-top:44px; max-width:640px;">
+      <table style="min-width:0;">
+        <thead><tr><th>Method</th><th>Continuity &uarr;</th><th>Coverage &uarr;</th><th>GCS &uarr;</th></tr></thead>
+        <tbody>
+          <tr><td>FM&#8209;WKS</td><td><strong>0.96 &plusmn; 0.01</strong></td><td>0.003 &plusmn; 0.001</td><td>0.007 &plusmn; 0.003</td></tr>
+          <tr><td>DenseMatcher</td><td>0.93 &plusmn; 0.07</td><td>0.01 &plusmn; 0.01</td><td>0.01 &plusmn; 0.01</td></tr>
+          <tr><td>Robo&#8209;ABC</td><td>0.77 &plusmn; 0.11</td><td>0.07 &plusmn; 0.06</td><td>0.11 &plusmn; 0.10</td></tr>
+          <tr><td>D3Fields</td><td>0.61 &plusmn; 0.08</td><td>0.10 &plusmn; 0.07</td><td>0.16 &plusmn; 0.09</td></tr>
+          <tr class="ours best"><td>SemAnCorr (Ours)</td><td>0.93 &plusmn; 0.03</td><td class="best-val">0.25 &plusmn; 0.11</td><td class="best-val">0.40 &plusmn; 0.12</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-note">Table&nbsp;II &mdash; Geometric Coherence Score (GCS), the harmonic mean of continuity and coverage. FM&#8209;WKS's high continuity comes from collapsing correspondence onto a handful of vertices; SemAnCorr is the only method with both high continuity and broad coverage.</p>
+
+    <div class="grid-2" style="margin-top:56px; align-items:start;">
+      <figure class="fig-card">
+        <img src="assets/images/inner-category.jpg" alt="SemAnCorr inner-category correspondence across scissors, pliers, eyeglasses, and other object pairs shown as smooth rainbow gradients.">
+        <div class="cap"><p style="margin:0; font-size:13px; color:var(--text-faint);"><span class="caption-label">Fig. 3a</span>Within&#8209;category correspondence. Top row: source coloring. Bottom row: each vertex takes the corresponding point's color from the source.</p></div>
+      </figure>
+      <figure class="fig-card">
+        <img src="assets/images/baseline-comparison.jpg" alt="Comparison of SemAnCorr against FM-WKS, Robo-ABC, DenseMatcher, and D3Fields baselines, showing smoother and more coherent color transfer.">
+        <div class="cap"><p style="margin:0; font-size:13px; color:var(--text-faint);"><span class="caption-label">Fig. 3b</span>Baseline comparison. Source coloring on the left; corresponded colorings on the right for each method.</p></div>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<hr class="rule thin">
+
+<section id="generalization">
+  <div class="wrap">
+    <div class="eyebrow"><span class="seg"></span>Generalization</div>
+    <h2 class="h">Beyond category boundaries</h2>
+    <p class="wide">Many manipulation skills transfer across functionally related but visually distinct categories. SemAnCorr's anchor confidence also doubles as a lightweight, training&#8209;free signal for whether a demonstrated skill is likely to transfer between two objects at all.</p>
+
+    <div class="grid-2" style="margin-top:34px;">
+      <div>
+        <div class="table-wrap">
+          <table style="min-width:0;">
+            <thead><tr><th>Method</th><th>Scissors &rarr; Pliers</th><th>Kettle &rarr; Bottle</th></tr></thead>
+            <tbody>
+              <tr><td>FM&#8209;WKS</td><td>55.3 &plusmn; 14.7</td><td>72.3 &plusmn; 15.4</td></tr>
+              <tr><td>DenseMatcher</td><td>63.5 &plusmn; 18.9</td><td>65.2 &plusmn; 13.8</td></tr>
+              <tr><td>Robo&#8209;ABC</td><td>70.3 &plusmn; 12.1</td><td>52.4 &plusmn; 15.6</td></tr>
+              <tr><td>D3Fields</td><td>87.2 &plusmn; 4.6</td><td>83.4 &plusmn; 7.5</td></tr>
+              <tr class="ours best"><td>SemAnCorr (Ours)</td><td class="best-val">89.7 &plusmn; 2.2</td><td class="best-val">87.8 &plusmn; 4.2</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">Table&nbsp;III &mdash; Cross&#8209;category semantic accuracy (sAcc &plusmn; std, %).</p>
+        <figure style="margin-top:28px;">
+          <img src="assets/images/cross-category.jpg" alt="Cross-category correspondence from scissors to pliers and kettle to bottle, shown as smooth rainbow gradients.">
+          <figcaption><span class="caption-label">Fig. 4</span>Cross&#8209;category correspondence: Scissors &rarr; Pliers (left), Kettle &rarr; Bottle (right).</figcaption>
+        </figure>
+      </div>
+      <figure class="fig-card">
+        <img src="assets/images/anchor-confidence.jpg" alt="Category-level anchor confidence matrix, showing highest confidence along the diagonal and elevated confidence between functionally related categories such as containers and hand tools.">
+        <div class="cap"><p style="margin:0; font-size:13px; color:var(--text-faint);"><span class="caption-label">Fig. 5</span>Category&#8209;level anchor confidence. Within&#8209;category pairs (diagonal) score highest; functionally related categories &mdash; containers, hand tools, appliances &mdash; score relatively higher than unrelated ones, even without any comparable baseline metric.</p></div>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<hr class="rule thin">
+
+<section id="ablation">
+  <div class="wrap">
+    <div class="eyebrow"><span class="seg"></span>Ablation</div>
+    <h2 class="h">Every component earns its place</h2>
+    <div class="grid-2">
+      <div>
+        <div class="table-wrap">
+          <table style="min-width:0;">
+            <thead><tr><th>Configuration</th><th>sAcc</th><th>GCS</th></tr></thead>
+            <tbody>
+              <tr class="ours best"><td>SemAnCorr (Ours)</td><td class="best-val">90.8 &plusmn; 2.5</td><td class="best-val">0.40 &plusmn; 0.12</td></tr>
+              <tr><td>w/o Semantic Clustering</td><td>66.0 &plusmn; 12.6</td><td>0.05 &plusmn; 0.03</td></tr>
+              <tr><td>w/o Anchor Selection</td><td>39.1 &plusmn; 12.1</td><td>0.08 &plusmn; 0.06</td></tr>
+              <tr><td>w/o Functional Map</td><td>72.9 &plusmn; 7.4</td><td>0.25 &plusmn; 0.07</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">Table&nbsp;IV &mdash; Removing anchor selection causes the largest drop in semantic accuracy; removing semantic clustering most damages geometric coherence.</p>
+        <div class="cross-note">
+          <div><strong>Clustering</strong>Suppresses noisy lifted features before correspondence estimation &mdash; without it, geometric coherence collapses.</div>
+          <div><strong>Anchor selection</strong>Determines <em>where</em> manipulation should transfer &mdash; without it, semantic accuracy drops the most.</div>
+          <div><strong>Functional map</strong>Provides smooth dense propagation &mdash; without it, both semantic and geometric quality degrade.</div>
+        </div>
+      </div>
+      <figure class="fig-card">
+        <img src="assets/images/ablation.jpg" alt="Ablation visualization: correspondence without semantic clustering, without anchor selection, without functional map, and the full SemAnCorr pipeline.">
+        <div class="cap"><p style="margin:0; font-size:13px; color:var(--text-faint);"><span class="caption-label">Fig. 6</span>Source object (left) and target correspondence under each ablation: w/o semantic clustering, w/o anchor selection, w/o functional map, and the full pipeline.</p></div>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<hr class="rule thin">
+
+<section id="realworld">
+  <div class="wrap">
+    <div class="eyebrow"><span class="seg"></span>Real&#8209;World Manipulation</div>
+    <h2 class="h">From one demonstration to a novel object</h2>
+    <p class="wide">Five kinesthetically demonstrated skills &mdash; peeling, opening, pouring, twisting, and cutting &mdash; are transferred zero&#8209;shot to unseen target objects using only the computed dense correspondence. A contact keyframe (end&#8209;effector pose + contact region) and relative motion segments are transferred via Procrustes alignment to the corresponding region on the target.</p>
+
+    <figure style="margin-top:30px;">
+      <img src="assets/images/real-world.jpg" alt="Real-world manipulation transfer across five tasks: banana peeling, pen opening, kettle pouring, bottle twisting, and scissor cutting, showing observations, correspondences, and execution key frames.">
+      <figcaption><span class="caption-label">Fig. 7</span>For each task, a skill demonstrated on a source object (left) is transferred to a semantically related target object (right) via the computed dense correspondence (second row); remaining rows show key frames of the source demonstration and the transferred execution.</figcaption>
+    </figure>
+
+    <div class="task-list">
+      <div class="task-row"><span class="n">01</span><span class="desc">Banana peeling &rarr; another banana</span><span class="score"><span>D3Fields <b>7/10</b></span><span>SemAnCorr <b>8/10</b></span></span></div>
+      <div class="task-row"><span class="n">02</span><span class="desc">Pen opening &rarr; marker</span><span class="score"><span>D3Fields <b>9/10</b></span><span>SemAnCorr <b>9/10</b></span></span></div>
+      <div class="task-row"><span class="n">03</span><span class="desc">Kettle pouring &rarr; toy cup</span><span class="score"><span>D3Fields <b>3/10</b></span><span>SemAnCorr <b>7/10</b></span></span></div>
+      <div class="task-row"><span class="n">04</span><span class="desc">Bottle twist&#8209;opening &rarr; another bottle</span><span class="score"><span>D3Fields <b>1/10</b></span><span>SemAnCorr <b>7/10</b></span></span></div>
+      <div class="task-row"><span class="n">05</span><span class="desc">Scissor cutting &rarr; nail clipper</span><span class="score"><span>D3Fields <b>3/10</b></span><span>SemAnCorr <b>6/10</b></span></span></div>
+    </div>
+    <p class="table-note">Table&nbsp;V &mdash; Real&#8209;world task success rate, 10 trials per task with varied object pose and viewpoint.</p>
+
+    <div class="grid-2" style="margin-top:48px;">
+      <figure class="fig-card">
+        <img src="assets/images/realworld-correspondence.jpg" alt="SemAnCorr real-world object correspondence for all five tasks.">
+        <div class="cap"><p style="margin:0; font-size:13px; color:var(--text-faint);"><span class="caption-label">Fig. 8a</span>SemAnCorr correspondence on real&#8209;world object pairs, Tasks 1&ndash;5.</p></div>
+      </figure>
+      <figure class="fig-card">
+        <img src="assets/images/d3fields-failure.jpg" alt="D3Fields failure cases on Task 3 and Task 4, showing spatially incoherent correspondence leading to incorrect local frames.">
+        <div class="cap"><p style="margin:0; font-size:13px; color:var(--text-faint);"><span class="caption-label">Fig. 8b</span>D3Fields fails on Tasks 3 &amp; 4: spatially incoherent correspondence yields incorrect local frames, causing task failure.</p></div>
+      </figure>
+    </div>
+    <p style="margin-top:26px; max-width:760px;">Both methods perform comparably on simpler tasks where the correct interaction region is relatively unambiguous. On tasks that additionally require preserving a local geometric frame &mdash; approach direction, end&#8209;effector orientation &mdash; D3Fields' spatially incoherent correspondence produces erroneous frames despite often identifying the correct semantic region. SemAnCorr's remaining failures stem mainly from mesh&#8209;to&#8209;workspace alignment error rather than correspondence estimation.</p>
+  </div>
+</section>
+
+<hr class="rule thin">
+
+<section id="bibtex">
+  <div class="wrap">
+    <div class="eyebrow"><span class="seg"></span>Citation</div>
+    <h2 class="h">BibTeX</h2>
+    <p>If you find this work useful, please cite the paper. Update the entry below once author and publication details are finalized.</p>
+    <div class="bib">
+      <button class="copy-btn" onclick="copyBib(this)">Copy</button>
+      <pre id="bibtex-text">@article{semancorr2026,
+  title   = {SemAnCorr: Semantic Anchored Correspondence for Zero-Shot Manipulation Skill Transfer},
+  author  = {Anonymous Authors},
+  journal = {IEEE Robotics and Automation Letters (RA-L)},
+  year    = {2026},
+  note    = {Under review}
+}</pre>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<footer>
+  <div class="wrap">
+    <span class="footer-mark">SemAnCorr &middot; Project page built with plain HTML/CSS, hosted on GitHub Pages.</span>
+    <div class="footer-links">
+      <a href="#top">Back to top</a>
+      <a href="#bibtex">Cite this work</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function copyBib(btn){
+    const text = document.getElementById('bibtex-text').innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      const old = btn.textContent;
+      btn.textContent = 'Copied';
+      setTimeout(() => btn.textContent = old, 1600);
+    });
+  }
+</script>
+
+</body>
+</html>
