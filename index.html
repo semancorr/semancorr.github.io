@@ -198,6 +198,15 @@
     line-height:1.6;
   }
 
+  .video-frame{
+    border-radius:14px;
+    overflow:hidden;
+    border:1px solid var(--line);
+    background:#000;
+    box-shadow:0 30px 80px -30px rgba(0,0,0,0.2);
+  }
+  .video-frame video{ display:block; width:100%; max-height:70vh; }
+
   /* ---------- sections ---------- */
   section{ padding:74px 0; border-top:1px solid var(--line); }
   section.hero{ border-top:none; }
@@ -426,6 +435,7 @@
     <a class="brand" href="#top"><span class="dot"></span>SemAnCorr</a>
     <nav class="navlinks">
       <a href="#abstract">Abstract</a>
+      <a href="#video">Video</a>
       <a href="#method">Method</a>
       <a href="#results">Results</a>
       <a href="#generalization">Generalization</a>
@@ -458,7 +468,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
         Code
       </a>
-      <a class="pill" href="#" data-role="video">
+      <a class="pill" href="#video" data-role="video">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
         Video
       </a>
@@ -476,6 +486,24 @@
 </section>
 
 <hr class="rule">
+
+<section id="video">
+  <div class="wrap">
+    <div class="eyebrow"><span class="seg"></span>Video</div>
+    <h2 class="h">Overview video</h2>
+    <p style="max-width:820px; color:var(--text-dim); margin:0 0 28px;">
+      A short overview of SemAnCorr: the semantic&#8209;anchored correspondence problem, our training&#8209;free pipeline, and real&#8209;world manipulation skill demonstrations and transfer executions.
+    </p>
+    <div class="video-frame">
+      <video controls preload="metadata" poster="assets/images/teaser.png">
+        <source src="assets/videos/semancorr_demo.mp4" type="video/mp4">
+        Your browser does not support embedded video. <a href="assets/videos/semancorr_demo.mp4">Download the video</a> instead.
+      </video>
+    </div>
+  </div>
+</section>
+
+<hr class="rule thin">
 
 <section id="abstract">
   <div class="wrap">
