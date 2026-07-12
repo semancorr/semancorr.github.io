@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
 
 <style>
   :root{
@@ -334,6 +335,24 @@
   tr.ours td{ background:rgba(47,191,174,0.06); }
   .table-note{ font-size:12.5px; color:var(--text-faint); margin-top:10px; }
 
+  /* equation card */
+  .eq-card{
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    background:var(--surface);
+    padding:22px 24px;
+  }
+  .eq-label{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:12px;
+    font-weight:600;
+    color:var(--text-dim);
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+  }
+  .eq{ margin-top:10px; overflow-x:auto; padding:2px 0; }
+  .eq-note{ margin-top:18px; font-size:12.5px; color:var(--text-faint); line-height:1.5; }
+
   /* image cards */
   .fig-card{
     border:1px solid var(--line);
@@ -554,10 +573,6 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
         Video
       </a>
-      <a class="pill" href="#" data-role="data">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg>
-        Benchmark
-      </a>
     </div>
 
     <figure class="teaser-frame">
@@ -678,40 +693,16 @@
 <section id="results">
   <div class="wrap">
     <div class="eyebrow"><span class="seg"></span>Quantitative Results</div>
-    <h2 class="h">Within&#8209;category correspondence</h2>
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap;">
+      <h2 class="h" style="margin:0;">Within&#8209;category correspondence</h2>
+      <a class="pill" href="https://sapien.ucsd.edu/browse" target="_blank" rel="noopener" style="margin-bottom:22px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg>
+        PartNet&#8209;Mobility
+      </a>
+    </div>
     <p class="wide">Evaluated on a dense correspondence benchmark built from seven PartNet&#8209;Mobility categories, against functional&#8209;map, 2D semantic, and 3D feature&#8209;field baselines. SemAnCorr leads on semantic accuracy in every category and is the only method that achieves both high continuity <em>and</em> meaningful surface coverage.</p>
 
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr><th>Method</th><th>Scissors</th><th>Pliers</th><th>Eyeglasses</th><th>Knife</th><th>Suitcase</th><th>Bottle</th><th>Kettle</th><th>Average</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>FM&#8209;WKS</td><td>58.5 &plusmn; 10.7</td><td>63.7 &plusmn; 16.1</td><td>59.1 &plusmn; 15.1</td><td>34.3 &plusmn; 28.6</td><td>83.8 &plusmn; 25.1</td><td>62.5 &plusmn; 37.1</td><td>79.7 &plusmn; 14.4</td><td>63.1 &plusmn; 15.0</td></tr>
-          <tr><td>DenseMatcher</td><td>71.5 &plusmn; 16.7</td><td>69.4 &plusmn; 17.5</td><td>70.7 &plusmn; 14.8</td><td>63.3 &plusmn; 25.5</td><td>54.6 &plusmn; 28.8</td><td>54.9 &plusmn; 27.8</td><td>71.5 &plusmn; 7.0</td><td>65.1 &plusmn; 7.1</td></tr>
-          <tr><td>Robo&#8209;ABC</td><td>72.9 &plusmn; 9.1</td><td>74.4 &plusmn; 10.9</td><td>62.3 &plusmn; 18.5</td><td>51.9 &plusmn; 26.9</td><td>71.5 &plusmn; 14.8</td><td>46.9 &plusmn; 26.4</td><td>62.6 &plusmn; 6.8</td><td>63.2 &plusmn; 9.9</td></tr>
-          <tr><td>D3Fields</td><td>86.2 &plusmn; 4.3</td><td>88.9 &plusmn; 7.0</td><td>85.4 &plusmn; 7.8</td><td>85.8 &plusmn; 7.9</td><td>83.2 &plusmn; 13.3</td><td>78.9 &plusmn; 7.4</td><td>84.1 &plusmn; 8.1</td><td>84.6 &plusmn; 3.5</td></tr>
-          <tr class="ours best"><td>SemAnCorr (Ours)</td><td class="best-val">88.5 &plusmn; 3.0</td><td class="best-val">94.0 &plusmn; 2.5</td><td class="best-val">93.5 &plusmn; 2.3</td><td class="best-val">90.8 &plusmn; 3.8</td><td class="best-val">92.2 &plusmn; 5.5</td><td class="best-val">89.4 &plusmn; 4.5</td><td>86.9 &plusmn; 9.9</td><td class="best-val">90.8 &plusmn; 2.5</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <p class="table-note">Table&nbsp;I &mdash; Within&#8209;category semantic accuracy (sAcc &plusmn; std, %). SemAnCorr improves 6.2 points over the strongest baseline, D3Fields.</p>
-
-    <div class="table-wrap" style="margin-top:44px; max-width:640px;">
-      <table style="min-width:0;">
-        <thead><tr><th>Method</th><th>Continuity &uarr;</th><th>Coverage &uarr;</th><th>GCS &uarr;</th></tr></thead>
-        <tbody>
-          <tr><td>FM&#8209;WKS</td><td><strong>0.96 &plusmn; 0.01</strong></td><td>0.003 &plusmn; 0.001</td><td>0.007 &plusmn; 0.003</td></tr>
-          <tr><td>DenseMatcher</td><td>0.93 &plusmn; 0.07</td><td>0.01 &plusmn; 0.01</td><td>0.01 &plusmn; 0.01</td></tr>
-          <tr><td>Robo&#8209;ABC</td><td>0.77 &plusmn; 0.11</td><td>0.07 &plusmn; 0.06</td><td>0.11 &plusmn; 0.10</td></tr>
-          <tr><td>D3Fields</td><td>0.61 &plusmn; 0.08</td><td>0.10 &plusmn; 0.07</td><td>0.16 &plusmn; 0.09</td></tr>
-          <tr class="ours best"><td>SemAnCorr (Ours)</td><td>0.93 &plusmn; 0.03</td><td class="best-val">0.25 &plusmn; 0.11</td><td class="best-val">0.40 &plusmn; 0.12</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <p class="table-note">Table&nbsp;II &mdash; Geometric Coherence Score (GCS), the harmonic mean of continuity and coverage. FM&#8209;WKS's high continuity comes from collapsing correspondence onto a handful of vertices; SemAnCorr is the only method with both high continuity and broad coverage.</p>
-
-    <figure class="mesh-compare" style="margin-top:56px;">
+    <figure class="mesh-compare" style="margin-top:30px;">
       <div class="mesh-compare-scroll">
         <div class="mesh-compare-grid labeled" style="--cols:7">
           <div class="mesh-row-label"></div>
@@ -780,6 +771,48 @@
       </div>
       <div class="cap"><p style="margin:0; font-size:13px; color:var(--text-faint);"><span class="caption-label">Fig. 3b</span>Baseline comparison. Source coloring on the left; corresponded colorings on the right for each method, rendered as interactive 3D meshes.</p></div>
     </figure>
+
+    <div class="table-wrap" style="margin-top:44px;">
+      <table>
+        <thead>
+          <tr><th>Method</th><th>Scissors</th><th>Pliers</th><th>Eyeglasses</th><th>Knife</th><th>Suitcase</th><th>Bottle</th><th>Kettle</th><th>Average</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>FM&#8209;WKS</td><td>58.5 &plusmn; 10.7</td><td>63.7 &plusmn; 16.1</td><td>59.1 &plusmn; 15.1</td><td>34.3 &plusmn; 28.6</td><td>83.8 &plusmn; 25.1</td><td>62.5 &plusmn; 37.1</td><td>79.7 &plusmn; 14.4</td><td>63.1 &plusmn; 15.0</td></tr>
+          <tr><td>DenseMatcher</td><td>71.5 &plusmn; 16.7</td><td>69.4 &plusmn; 17.5</td><td>70.7 &plusmn; 14.8</td><td>63.3 &plusmn; 25.5</td><td>54.6 &plusmn; 28.8</td><td>54.9 &plusmn; 27.8</td><td>71.5 &plusmn; 7.0</td><td>65.1 &plusmn; 7.1</td></tr>
+          <tr><td>Robo&#8209;ABC</td><td>72.9 &plusmn; 9.1</td><td>74.4 &plusmn; 10.9</td><td>62.3 &plusmn; 18.5</td><td>51.9 &plusmn; 26.9</td><td>71.5 &plusmn; 14.8</td><td>46.9 &plusmn; 26.4</td><td>62.6 &plusmn; 6.8</td><td>63.2 &plusmn; 9.9</td></tr>
+          <tr><td>D3Fields</td><td>86.2 &plusmn; 4.3</td><td>88.9 &plusmn; 7.0</td><td>85.4 &plusmn; 7.8</td><td>85.8 &plusmn; 7.9</td><td>83.2 &plusmn; 13.3</td><td>78.9 &plusmn; 7.4</td><td>84.1 &plusmn; 8.1</td><td>84.6 &plusmn; 3.5</td></tr>
+          <tr class="ours best"><td>SemAnCorr (Ours)</td><td class="best-val">88.5 &plusmn; 3.0</td><td class="best-val">94.0 &plusmn; 2.5</td><td class="best-val">93.5 &plusmn; 2.3</td><td class="best-val">90.8 &plusmn; 3.8</td><td class="best-val">92.2 &plusmn; 5.5</td><td class="best-val">89.4 &plusmn; 4.5</td><td>86.9 &plusmn; 9.9</td><td class="best-val">90.8 &plusmn; 2.5</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-note">Table&nbsp;I &mdash; Within&#8209;category semantic accuracy (sAcc &plusmn; std, %). SemAnCorr improves 6.2 points over the strongest baseline, D3Fields.</p>
+
+    <div class="grid-2" style="margin-top:44px;">
+      <div>
+        <div class="table-wrap" style="max-width:640px;">
+          <table style="min-width:0;">
+            <thead><tr><th>Method</th><th>Continuity &uarr;</th><th>Coverage &uarr;</th><th>GCS &uarr;</th></tr></thead>
+            <tbody>
+              <tr><td>FM&#8209;WKS</td><td><strong>0.96 &plusmn; 0.01</strong></td><td>0.003 &plusmn; 0.001</td><td>0.007 &plusmn; 0.003</td></tr>
+              <tr><td>DenseMatcher</td><td>0.93 &plusmn; 0.07</td><td>0.01 &plusmn; 0.01</td><td>0.01 &plusmn; 0.01</td></tr>
+              <tr><td>Robo&#8209;ABC</td><td>0.77 &plusmn; 0.11</td><td>0.07 &plusmn; 0.06</td><td>0.11 &plusmn; 0.10</td></tr>
+              <tr><td>D3Fields</td><td>0.61 &plusmn; 0.08</td><td>0.10 &plusmn; 0.07</td><td>0.16 &plusmn; 0.09</td></tr>
+              <tr class="ours best"><td>SemAnCorr (Ours)</td><td>0.93 &plusmn; 0.03</td><td class="best-val">0.25 &plusmn; 0.11</td><td class="best-val">0.40 &plusmn; 0.12</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">Table&nbsp;II &mdash; Geometric Coherence Score (GCS), the harmonic mean of continuity and coverage. FM&#8209;WKS's high continuity comes from collapsing correspondence onto a handful of vertices; SemAnCorr is the only method with both high continuity and broad coverage.</p>
+      </div>
+
+      <div class="eq-card">
+        <div class="eq-label">Semantic Accuracy</div>
+        <div class="eq">$$\text{sAcc} = \frac{1}{|P|}\sum_{p \in P} \mathbb{1}\!\left[\, l_p = l_{f(p)} \,\right]$$</div>
+        <div class="eq-label" style="margin-top:20px;">Geometric Coherence Score</div>
+        <div class="eq">$$\text{GCS} = \frac{2 \cdot \text{Cont} \cdot \text{Cov}}{\text{Cont} + \text{Cov}}$$</div>
+        <p class="eq-note">sAcc measures the fraction of target vertices whose transferred label <em>l<sub>f(p)</sub></em> matches ground truth &mdash; <em>where</em> to interact. GCS is the harmonic mean of continuity (local smoothness) and coverage (surface reached by the map), rewarding correspondences that are both smooth and non&#8209;collapsing &mdash; <em>how</em> to interact.</p>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -791,7 +824,30 @@
     <h2 class="h">Beyond category boundaries</h2>
     <p class="wide">Many manipulation skills transfer across functionally related but visually distinct categories. SemAnCorr's anchor confidence also doubles as a lightweight, training&#8209;free signal for whether a demonstrated skill is likely to transfer between two objects at all.</p>
 
-    <div class="grid-2" style="margin-top:34px;">
+    <div class="grid-2" style="margin-top:30px;">
+      <figure class="mesh-compare">
+        <div class="mesh-compare-scroll">
+          <div class="mesh-compare-grid labeled" style="--cols:2">
+            <div class="mesh-row-label"></div>
+            <div class="mesh-col-header">Scissors &rarr; Pliers</div>
+            <div class="mesh-col-header">Kettle &rarr; Bottle</div>
+
+            <div class="mesh-row-label">Source</div>
+            <div class="mesh-cell" data-mesh="assets/meshes/cross-cat-examples/scissors_ref.ply"><div class="mesh-loading">loading&hellip;</div></div>
+            <div class="mesh-cell" data-mesh="assets/meshes/cross-cat-examples/kettle_ref.ply"><div class="mesh-loading">loading&hellip;</div></div>
+
+            <div class="mesh-row-label row-divider">Target</div>
+            <div class="mesh-cell row-divider" data-mesh="assets/meshes/cross-cat-examples/pliers_corr.ply"><div class="mesh-loading">loading&hellip;</div></div>
+            <div class="mesh-cell row-divider" data-mesh="assets/meshes/cross-cat-examples/bottle_corr.ply"><div class="mesh-loading">loading&hellip;</div></div>
+          </div>
+        </div>
+        <div class="mesh-compare-hint">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;flex:none;"><path d="M9 11.5V6a1.5 1.5 0 0 1 3 0v5"/><path d="M12 11.5V4.5a1.5 1.5 0 0 1 3 0v7"/><path d="M15 11.5V6a1.5 1.5 0 0 1 3 0v7"/><path d="M6 12l.5 5c.3 3 2 5 5.5 5s5.5-2.5 5.5-6v-3"/></svg>
+          Drag to rotate &middot; scroll to zoom &mdash; each panel is an independent live mesh viewer.
+        </div>
+        <figcaption><span class="caption-label">Fig. 4</span>Cross&#8209;category correspondence: Scissors &rarr; Pliers (left), Kettle &rarr; Bottle (right), rendered as interactive 3D meshes.</figcaption>
+      </figure>
+
       <div>
         <div class="table-wrap">
           <table style="min-width:0;">
@@ -806,15 +862,11 @@
           </table>
         </div>
         <p class="table-note">Table&nbsp;III &mdash; Cross&#8209;category semantic accuracy (sAcc &plusmn; std, %).</p>
-        <figure style="margin-top:28px;">
-          <img src="assets/images/cross-category.png" alt="Cross-category correspondence from scissors to pliers and kettle to bottle, shown as smooth rainbow gradients.">
-          <figcaption><span class="caption-label">Fig. 4</span>Cross&#8209;category correspondence: Scissors &rarr; Pliers (left), Kettle &rarr; Bottle (right).</figcaption>
+        <figure class="fig-card" style="margin-top:28px;">
+          <img src="assets/images/anchor-confidence.png" alt="Category-level anchor confidence matrix, showing highest confidence along the diagonal and elevated confidence between functionally related categories such as containers and hand tools.">
+          <div class="cap"><p style="margin:0; font-size:13px; color:var(--text-faint);"><span class="caption-label">Fig. 5</span>Category&#8209;level anchor confidence. Within&#8209;category pairs (diagonal) score highest; functionally related categories &mdash; containers, hand tools, appliances &mdash; score relatively higher than unrelated ones, even without any comparable baseline metric.</p></div>
         </figure>
       </div>
-      <figure class="fig-card">
-        <img src="assets/images/anchor-confidence.png" alt="Category-level anchor confidence matrix, showing highest confidence along the diagonal and elevated confidence between functionally related categories such as containers and hand tools.">
-        <div class="cap"><p style="margin:0; font-size:13px; color:var(--text-faint);"><span class="caption-label">Fig. 5</span>Category&#8209;level anchor confidence. Within&#8209;category pairs (diagonal) score highest; functionally related categories &mdash; containers, hand tools, appliances &mdash; score relatively higher than unrelated ones, even without any comparable baseline metric.</p></div>
-      </figure>
     </div>
   </div>
 </section>
@@ -947,6 +999,10 @@
     </div>
   </div>
 </footer>
+
+<script defer src="https://unpkg.com/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://unpkg.com/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+  onload="renderMathInElement(document.body, { delimiters: [{left:'$$', right:'$$', display:true}, {left:'$', right:'$', display:false}] });"></script>
 
 <script>
   function copyBib(btn){
