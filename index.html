@@ -397,6 +397,11 @@
     font-size:11px; letter-spacing:0.02em; text-align:center;
     color:var(--text-dim);
     background:var(--surface);
+    padding:6px 8px; line-height:1.35;
+  }
+  .mesh-compare-grid.labeled.wide-label{
+    grid-template-columns:150px repeat(var(--cols, 6), minmax(120px, 1fr));
+    min-width:calc(150px + var(--cols, 6) * 120px);
   }
   .mesh-cell{
     position:relative;
@@ -406,6 +411,23 @@
   .mesh-cell:active{ cursor:grabbing; }
   .mesh-cell.row-divider, .mesh-row-label.row-divider{
     border-top:2px solid var(--text-faint);
+  }
+  .mesh-cell.row-divider.dotted, .mesh-row-label.row-divider.dotted{
+    border-top-style:dotted;
+  }
+  .mesh-compare-grid.vdivide .mesh-col-header,
+  .mesh-compare-grid.vdivide .mesh-cell,
+  .mesh-compare-grid.vdivide .mesh-row-label{
+    border-right:2px solid var(--text-faint);
+  }
+  .mesh-compare-grid.vdivide.dotted .mesh-col-header,
+  .mesh-compare-grid.vdivide.dotted .mesh-cell,
+  .mesh-compare-grid.vdivide.dotted .mesh-row-label{
+    border-right-style:dotted;
+  }
+  .mesh-compare-grid.vdivide .no-vline,
+  .mesh-compare-grid.vdivide.dotted .no-vline{
+    border-right:none;
   }
   .mesh-cell .mesh-loading{
     position:absolute; inset:0; z-index:2;
@@ -680,7 +702,7 @@
 
     <figure class="mesh-compare" style="margin-top:30px;">
       <div class="mesh-compare-scroll">
-        <div class="mesh-compare-grid labeled" style="--cols:7">
+        <div class="mesh-compare-grid labeled vdivide" style="--cols:7">
           <div class="mesh-row-label"></div>
           <div class="mesh-col-header">Scissors</div>
           <div class="mesh-col-header">Pliers</div>
@@ -688,7 +710,7 @@
           <div class="mesh-col-header">Knife</div>
           <div class="mesh-col-header">Suitcase</div>
           <div class="mesh-col-header">Bottle</div>
-          <div class="mesh-col-header">Kettle</div>
+          <div class="mesh-col-header no-vline">Kettle</div>
 
           <div class="mesh-row-label">Source</div>
           <div class="mesh-cell" data-mesh="assets/meshes/in-cat-examples/scissors_ref.ply"><div class="mesh-loading">loading&hellip;</div></div>
@@ -697,16 +719,16 @@
           <div class="mesh-cell" data-mesh="assets/meshes/in-cat-examples/knife_ref.ply"><div class="mesh-loading">loading&hellip;</div></div>
           <div class="mesh-cell" data-mesh="assets/meshes/in-cat-examples/suitcase_ref.ply"><div class="mesh-loading">loading&hellip;</div></div>
           <div class="mesh-cell" data-mesh="assets/meshes/in-cat-examples/bottle_ref.ply"><div class="mesh-loading">loading&hellip;</div></div>
-          <div class="mesh-cell" data-mesh="assets/meshes/in-cat-examples/kettle_ref.ply"><div class="mesh-loading">loading&hellip;</div></div>
+          <div class="mesh-cell no-vline" data-mesh="assets/meshes/in-cat-examples/kettle_ref.ply"><div class="mesh-loading">loading&hellip;</div></div>
 
-          <div class="mesh-row-label row-divider">Target</div>
-          <div class="mesh-cell row-divider" data-mesh="assets/meshes/in-cat-examples/scissors_corr.ply"><div class="mesh-loading">loading&hellip;</div></div>
-          <div class="mesh-cell row-divider" data-mesh="assets/meshes/in-cat-examples/plier_corr.ply"><div class="mesh-loading">loading&hellip;</div></div>
-          <div class="mesh-cell row-divider" data-mesh="assets/meshes/in-cat-examples/sunglasses_corr.ply"><div class="mesh-loading">loading&hellip;</div></div>
-          <div class="mesh-cell row-divider" data-mesh="assets/meshes/in-cat-examples/knife_corr.ply"><div class="mesh-loading">loading&hellip;</div></div>
-          <div class="mesh-cell row-divider" data-mesh="assets/meshes/in-cat-examples/suitcase_corr.ply"><div class="mesh-loading">loading&hellip;</div></div>
-          <div class="mesh-cell row-divider" data-mesh="assets/meshes/in-cat-examples/bottle_corr.ply"><div class="mesh-loading">loading&hellip;</div></div>
-          <div class="mesh-cell row-divider" data-mesh="assets/meshes/in-cat-examples/kettle_corr.ply"><div class="mesh-loading">loading&hellip;</div></div>
+          <div class="mesh-row-label row-divider dotted">Target</div>
+          <div class="mesh-cell row-divider dotted" data-mesh="assets/meshes/in-cat-examples/scissors_corr.ply"><div class="mesh-loading">loading&hellip;</div></div>
+          <div class="mesh-cell row-divider dotted" data-mesh="assets/meshes/in-cat-examples/plier_corr.ply"><div class="mesh-loading">loading&hellip;</div></div>
+          <div class="mesh-cell row-divider dotted" data-mesh="assets/meshes/in-cat-examples/sunglasses_corr.ply"><div class="mesh-loading">loading&hellip;</div></div>
+          <div class="mesh-cell row-divider dotted" data-mesh="assets/meshes/in-cat-examples/knife_corr.ply"><div class="mesh-loading">loading&hellip;</div></div>
+          <div class="mesh-cell row-divider dotted" data-mesh="assets/meshes/in-cat-examples/suitcase_corr.ply"><div class="mesh-loading">loading&hellip;</div></div>
+          <div class="mesh-cell row-divider dotted" data-mesh="assets/meshes/in-cat-examples/bottle_corr.ply"><div class="mesh-loading">loading&hellip;</div></div>
+          <div class="mesh-cell row-divider dotted no-vline" data-mesh="assets/meshes/in-cat-examples/kettle_corr.ply"><div class="mesh-loading">loading&hellip;</div></div>
         </div>
       </div>
       <div class="mesh-compare-hint">
@@ -718,27 +740,27 @@
 
     <figure class="mesh-compare" style="margin-top:28px;">
       <div class="mesh-compare-scroll">
-        <div class="mesh-compare-grid" style="--cols:6">
+        <div class="mesh-compare-grid vdivide dotted" style="--cols:6">
           <div class="mesh-col-header">Source Object<br>Coloring</div>
           <div class="mesh-col-header">FM&#8209;WKS</div>
           <div class="mesh-col-header">Robo&#8209;ABC</div>
           <div class="mesh-col-header">DenseMatcher</div>
           <div class="mesh-col-header">D3Fields</div>
-          <div class="mesh-col-header">SemAnCorr<br>(Ours)</div>
+          <div class="mesh-col-header no-vline">SemAnCorr<br>(Ours)</div>
 
           <div class="mesh-cell" data-mesh="assets/meshes/baseline-comp/Bottle/bottle_1_ref.ply"><div class="mesh-loading">loading&hellip;</div></div>
           <div class="mesh-cell" data-mesh="assets/meshes/baseline-comp/Bottle/bottle_2_fmwks.ply"><div class="mesh-loading">loading&hellip;</div></div>
           <div class="mesh-cell" data-mesh="assets/meshes/baseline-comp/Bottle/bottle_2_roboabc.ply"><div class="mesh-loading">loading&hellip;</div></div>
           <div class="mesh-cell" data-mesh="assets/meshes/baseline-comp/Bottle/bottle_2_densematcher.ply"><div class="mesh-loading">loading&hellip;</div></div>
           <div class="mesh-cell" data-mesh="assets/meshes/baseline-comp/Bottle/bottle_2_d3fields.ply"><div class="mesh-loading">loading&hellip;</div></div>
-          <div class="mesh-cell" data-mesh="assets/meshes/baseline-comp/Bottle/bottle_2_semancorr.ply"><div class="mesh-loading">loading&hellip;</div></div>
+          <div class="mesh-cell no-vline" data-mesh="assets/meshes/baseline-comp/Bottle/bottle_2_semancorr.ply"><div class="mesh-loading">loading&hellip;</div></div>
 
           <div class="mesh-cell row-divider" data-mesh="assets/meshes/baseline-comp/Plier/plier_1_ref.ply"><div class="mesh-loading">loading&hellip;</div></div>
           <div class="mesh-cell row-divider" data-mesh="assets/meshes/baseline-comp/Plier/plier_2_fmwks.ply"><div class="mesh-loading">loading&hellip;</div></div>
           <div class="mesh-cell row-divider" data-mesh="assets/meshes/baseline-comp/Plier/plier_2_roboabc.ply"><div class="mesh-loading">loading&hellip;</div></div>
           <div class="mesh-cell row-divider" data-mesh="assets/meshes/baseline-comp/Plier/plier_2_densematcher.ply"><div class="mesh-loading">loading&hellip;</div></div>
           <div class="mesh-cell row-divider" data-mesh="assets/meshes/baseline-comp/Plier/plier_2_d3fields.ply"><div class="mesh-loading">loading&hellip;</div></div>
-          <div class="mesh-cell row-divider" data-mesh="assets/meshes/baseline-comp/Plier/plier_2_semancorr.ply"><div class="mesh-loading">loading&hellip;</div></div>
+          <div class="mesh-cell row-divider no-vline" data-mesh="assets/meshes/baseline-comp/Plier/plier_2_semancorr.ply"><div class="mesh-loading">loading&hellip;</div></div>
         </div>
       </div>
       <div class="mesh-compare-hint">
@@ -803,25 +825,25 @@
     <div class="grid-2" style="margin-top:30px;">
       <figure class="mesh-compare">
         <div class="mesh-compare-scroll">
-          <div class="mesh-compare-grid labeled" style="--cols:2">
+          <div class="mesh-compare-grid labeled wide-label vdivide dotted" style="--cols:2">
             <div class="mesh-row-label"></div>
-            <div class="mesh-col-header">Scissors &rarr; Pliers</div>
-            <div class="mesh-col-header">Kettle &rarr; Bottle</div>
+            <div class="mesh-col-header">Source</div>
+            <div class="mesh-col-header no-vline">Target</div>
 
-            <div class="mesh-row-label">Source</div>
+            <div class="mesh-row-label">Scissors &rarr; Pliers</div>
             <div class="mesh-cell" data-mesh="assets/meshes/cross-cat-examples/scissors_ref.ply"><div class="mesh-loading">loading&hellip;</div></div>
-            <div class="mesh-cell" data-mesh="assets/meshes/cross-cat-examples/kettle_ref.ply"><div class="mesh-loading">loading&hellip;</div></div>
+            <div class="mesh-cell no-vline" data-mesh="assets/meshes/cross-cat-examples/pliers_corr.ply"><div class="mesh-loading">loading&hellip;</div></div>
 
-            <div class="mesh-row-label row-divider">Target</div>
-            <div class="mesh-cell row-divider" data-mesh="assets/meshes/cross-cat-examples/pliers_corr.ply"><div class="mesh-loading">loading&hellip;</div></div>
-            <div class="mesh-cell row-divider" data-mesh="assets/meshes/cross-cat-examples/bottle_corr.ply"><div class="mesh-loading">loading&hellip;</div></div>
+            <div class="mesh-row-label row-divider">Kettle &rarr; Bottle</div>
+            <div class="mesh-cell row-divider" data-mesh="assets/meshes/cross-cat-examples/kettle_ref.ply"><div class="mesh-loading">loading&hellip;</div></div>
+            <div class="mesh-cell row-divider no-vline" data-mesh="assets/meshes/cross-cat-examples/bottle_corr.ply"><div class="mesh-loading">loading&hellip;</div></div>
           </div>
         </div>
         <div class="mesh-compare-hint">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;flex:none;"><path d="M9 11.5V6a1.5 1.5 0 0 1 3 0v5"/><path d="M12 11.5V4.5a1.5 1.5 0 0 1 3 0v7"/><path d="M15 11.5V6a1.5 1.5 0 0 1 3 0v7"/><path d="M6 12l.5 5c.3 3 2 5 5.5 5s5.5-2.5 5.5-6v-3"/></svg>
           Drag to rotate &middot; scroll to zoom &mdash; each panel is an independent live mesh viewer.
         </div>
-        <figcaption><span class="caption-label">Fig. 4</span>Cross&#8209;category correspondence: Scissors &rarr; Pliers (left), Kettle &rarr; Bottle (right), rendered as interactive 3D meshes.</figcaption>
+        <figcaption><span class="caption-label">Fig. 4</span>Cross&#8209;category correspondence: Scissors &rarr; Pliers (top), Kettle &rarr; Bottle (bottom), rendered as interactive 3D meshes.</figcaption>
       </figure>
 
       <div>
