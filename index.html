@@ -469,31 +469,6 @@
   .task-row .score span{ color:var(--text-faint); }
   .task-row .score b{ color:var(--c3); font-weight:600; }
 
-  /* bibtex */
-  .bib{
-    background:var(--surface);
-    border:1px solid var(--line);
-    border-radius:var(--radius);
-    padding:26px 28px;
-    position:relative;
-    margin-top:24px;
-  }
-  .bib pre{
-    margin:0; white-space:pre-wrap; word-break:break-word;
-    font-family:'JetBrains Mono', monospace;
-    font-size:12.8px; line-height:1.7; color:var(--text-dim);
-  }
-  .copy-btn{
-    position:absolute; top:18px; right:18px;
-    font-family:'JetBrains Mono', monospace;
-    font-size:11.5px; letter-spacing:0.04em;
-    background:var(--surface-2); color:var(--text-dim);
-    border:1px solid var(--line); border-radius:6px;
-    padding:7px 12px; cursor:pointer;
-    transition:all .15s ease;
-  }
-  .copy-btn:hover{ color:var(--text); border-color:var(--accent); }
-
   /* footer */
   footer{
     padding:44px 0 60px;
@@ -543,7 +518,6 @@
       <a href="#results">Results</a>
       <a href="#generalization">Generalization</a>
       <a href="#realworld">Real&#8209;World</a>
-      <a href="#bibtex">BibTeX</a>
     </nav>
   </div>
 </div>
@@ -551,7 +525,7 @@
 <a id="top"></a>
 <section class="hero">
   <div class="wrap">
-    <span class="venue-tag"><span class="dot"></span>IEEE Robotics and Automation Letters &middot; Under Review</span>
+    <span class="venue-tag"><span class="dot"></span>Under Review</span>
 
     <h1 class="title">
       <em>SemAnCorr</em>: <em>Sem</em>antic <em>An</em>chored <em>Corr</em>espondence for Zero-Shot Manipulation Skill Transfer
@@ -580,7 +554,7 @@
     <figure class="teaser-frame">
       <img src="assets/images/teaser.png" alt="SemAnCorr produces dense vertex-level correspondence across geometrically diverse object instances, enabling zero-shot transfer of manipulation skills such as pouring, wiping, and grasping.">
     </figure>
-    <p class="teaser-cap"><span class="caption-label">Fig. 1</span>SemAnCorr computes dense, vertex-level correspondence across geometrically diverse object instances that respects semantically similar parts while smoothly spanning the object surface (left). The resulting correspondence transfers a single demonstration to previously unseen objects that share functional structure but differ in geometry (right).</p>
+    <p class="teaser-cap">SemAnCorr computes dense, vertex-level correspondence across geometrically diverse object instances that respects semantically similar parts while smoothly spanning the object surface (left). The resulting correspondence transfers a single demonstration to previously unseen objects that share functional structure but differ in geometry (right).</p>
   </div>
 </section>
 
@@ -984,26 +958,6 @@
   </div>
 </section>
 
-<hr class="rule thin">
-
-<section id="bibtex">
-  <div class="wrap">
-    <div class="eyebrow"><span class="seg"></span>Citation</div>
-    <h2 class="h">BibTeX</h2>
-    <p>If you find this work useful, please cite the paper. Update the entry below once author and publication details are finalized.</p>
-    <div class="bib">
-      <button class="copy-btn" onclick="copyBib(this)">Copy</button>
-      <pre id="bibtex-text">@article{semancorr2026,
-  title   = {SemAnCorr: Semantic Anchored Correspondence for Zero-Shot Manipulation Skill Transfer},
-  author  = {Anonymous Authors},
-  journal = {IEEE Robotics and Automation Letters (RA-L)},
-  year    = {2026},
-  note    = {Under review}
-}</pre>
-    </div>
-  </div>
-</section>
-
 <hr class="rule">
 
 <footer>
@@ -1011,7 +965,6 @@
     <span class="footer-mark">SemAnCorr &middot; Project page built with plain HTML/CSS, hosted on GitHub Pages.</span>
     <div class="footer-links">
       <a href="#top">Back to top</a>
-      <a href="#bibtex">Cite this work</a>
     </div>
   </div>
 </footer>
@@ -1021,15 +974,6 @@
   onload="renderMathInElement(document.body, { delimiters: [{left:'$$', right:'$$', display:true}, {left:'$', right:'$', display:false}] });"></script>
 
 <script>
-  function copyBib(btn){
-    const text = document.getElementById('bibtex-text').innerText;
-    navigator.clipboard.writeText(text).then(() => {
-      const old = btn.textContent;
-      btn.textContent = 'Copied';
-      setTimeout(() => btn.textContent = old, 1600);
-    });
-  }
-
   (function(){
     const video = document.getElementById('task-clip-video');
     const buttons = document.querySelectorAll('.task-clip-links .pill');
