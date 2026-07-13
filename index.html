@@ -1038,11 +1038,16 @@
     const defaultStart = parseFloat(video.dataset.defaultStart);
     const defaultEnd = parseFloat(video.dataset.defaultEnd);
     let activeEnd = defaultEnd;
+    let loopingDefault = true;
 
     function onTimeUpdate(){
       if (activeEnd !== null && video.currentTime >= activeEnd){
-        video.pause();
-        activeEnd = null;
+        if (loopingDefault){
+          video.currentTime = defaultStart;
+        } else {
+          video.pause();
+          activeEnd = null;
+        }
       }
     }
     video.addEventListener('timeupdate', onTimeUpdate);
@@ -1057,6 +1062,7 @@
       btn.addEventListener('click', () => {
         buttons.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
+        loopingDefault = false;
         activeEnd = parseFloat(btn.dataset.end);
         video.currentTime = parseFloat(btn.dataset.start);
         video.play();
