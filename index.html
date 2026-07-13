@@ -177,12 +177,14 @@
     background:var(--surface);
     border:1px solid var(--line);
     padding:10px 18px; border-radius:100px;
-    text-decoration:none;
+    text-decoration:none; cursor:pointer;
+    appearance:none; -webkit-appearance:none;
     transition:border-color .15s ease, transform .15s ease, background .15s ease;
   }
   .pill:hover{ border-color:var(--accent); background:var(--surface-2); transform:translateY(-1px); }
   .pill.primary{ background:var(--accent); color:#0c1512; border-color:var(--accent); font-weight:600; }
   .pill.primary:hover{ background:#39d4c1; }
+  .pill.active{ border-color:var(--accent); background:var(--accent-soft); color:var(--text); }
   .pill svg{ width:15px; height:15px; }
 
   .teaser-frame{
@@ -954,6 +956,20 @@
     </div>
     <p class="table-note">Table&nbsp;V &mdash; Real&#8209;world task success rate, 10 trials per task with varied object pose and viewpoint.</p>
 
+    <div class="video-frame" style="margin-top:34px;">
+      <video id="task-clip-video" controls muted playsinline preload="auto" poster="assets/images/teaser.png" data-default-start="93" data-default-end="135">
+        <source src="assets/videos/semancorr_demo.mp4" type="video/mp4">
+        Your browser does not support embedded video. <a href="assets/videos/semancorr_demo.mp4">Download the video</a> instead.
+      </video>
+    </div>
+    <div class="task-clip-links" style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+      <button type="button" class="pill" data-start="93" data-end="106.5">Task 1: Banana Peeling</button>
+      <button type="button" class="pill" data-start="108" data-end="111">Task 2: Pen Opening</button>
+      <button type="button" class="pill" data-start="113" data-end="119">Task 3: Kettle Pouring</button>
+      <button type="button" class="pill" data-start="121" data-end="127">Task 4: Bottle Twist&#8209;Opening</button>
+      <button type="button" class="pill" data-start="129" data-end="135">Task 5: Scissor Cutting</button>
+    </div>
+
     <div class="grid-2" style="margin-top:48px;">
       <figure class="fig-card">
         <img src="assets/images/realworld-correspondence.png" alt="SemAnCorr real-world object correspondence for all five tasks.">
@@ -1013,6 +1029,40 @@
       setTimeout(() => btn.textContent = old, 1600);
     });
   }
+
+  (function(){
+    const video = document.getElementById('task-clip-video');
+    const buttons = document.querySelectorAll('.task-clip-links .pill');
+    if (!video || !buttons.length) return;
+
+    const defaultStart = parseFloat(video.dataset.defaultStart);
+    const defaultEnd = parseFloat(video.dataset.defaultEnd);
+    let activeEnd = defaultEnd;
+
+    function onTimeUpdate(){
+      if (activeEnd !== null && video.currentTime >= activeEnd){
+        video.pause();
+        activeEnd = null;
+      }
+    }
+    video.addEventListener('timeupdate', onTimeUpdate);
+
+    video.addEventListener('loadedmetadata', () => {
+      video.muted = true;
+      video.currentTime = defaultStart;
+      video.play().catch(() => {});
+    }, { once:true });
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeEnd = parseFloat(btn.dataset.end);
+        video.currentTime = parseFloat(btn.dataset.start);
+        video.play();
+      });
+    });
+  })();
 </script>
 
 <script type="module">
