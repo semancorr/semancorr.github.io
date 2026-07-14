@@ -52,12 +52,12 @@
     font-family:'Space Grotesk', sans-serif;
   }
 
-  code, .mono, table, .authors, .method-step .num, .links, .caption-label{
+  code, .mono, table, .authors, .method-step .num, .links{
     font-family:'JetBrains Mono', monospace;
   }
 
   a{ color:var(--text); }
-  img{ max-width:100%; display:block; border-radius:6px; }
+  img{ width:100%; max-width:100%; display:block; border-radius:6px; }
 
   .wrap{
     max-width:var(--maxw);
@@ -216,7 +216,7 @@
 
   .eyebrow{
     display:flex; align-items:center; gap:12px;
-    font-size:12px; letter-spacing:0.14em; text-transform:uppercase;
+    font-size:15px; letter-spacing:0.14em; text-transform:uppercase;
     color:var(--text-faint);
     margin-bottom:16px;
   }
@@ -236,10 +236,10 @@
     font-size:19px;
     line-height:1.75;
     color:var(--text);
-    max-width:820px;
   }
   p{ color:var(--text-dim); max-width:760px; }
   section p.wide{ max-width:none; }
+  .teaser-cap, .cap p, figcaption{ max-width:none; padding:0 4px; }
 
   .grid-2{ display:grid; grid-template-columns:1.1fr 0.9fr; gap:48px; align-items:start; }
   .grid-2.wide-right{ grid-template-columns:0.85fr 1.15fr; }
@@ -252,12 +252,6 @@
     color:var(--text-faint);
     line-height:1.65;
   }
-  .caption-label{
-    color:var(--text-dim);
-    font-size:12px;
-    margin-right:6px;
-  }
-
   /* method steps */
   .method-steps{
     display:grid; gap:14px;
@@ -335,6 +329,7 @@
   tbody tr.best td{ color:var(--text); }
   td.best-val{ color:var(--c3); font-weight:600; }
   tr.ours td{ background:rgba(47,191,174,0.06); }
+  .table-wrap.roomy thead th, .table-wrap.roomy tbody td{ padding-top:20px; padding-bottom:20px; }
   .table-note{ font-size:12.5px; color:var(--text-faint); margin-top:10px; }
 
   /* equation card */
@@ -474,23 +469,6 @@
   }
   .cross-note strong{ color:var(--text); display:block; margin-bottom:4px; font-family:'Space Grotesk',sans-serif; font-size:13px;}
 
-  /* tasks */
-  .task-list{ display:grid; gap:10px; margin-top:24px; }
-  .task-row{
-    display:grid; grid-template-columns:30px 1fr auto;
-    align-items:center; gap:16px;
-    padding:14px 18px;
-    background:var(--surface);
-    border:1px solid var(--line);
-    border-radius:8px;
-    font-size:14px;
-  }
-  .task-row .n{ color:var(--text-faint); font-family:'JetBrains Mono',monospace; font-size:12px; }
-  .task-row .desc{ color:var(--text-dim); }
-  .task-row .score{ display:flex; gap:18px; font-family:'JetBrains Mono',monospace; font-size:12.5px; }
-  .task-row .score span{ color:var(--text-faint); }
-  .task-row .score b{ color:var(--c3); font-weight:600; }
-
   /* footer */
   footer{
     padding:44px 0 60px;
@@ -586,7 +564,7 @@
   <div class="wrap">
     <div class="eyebrow"><span class="seg"></span>Video</div>
     <h2 class="h">Overview video</h2>
-    <p style="max-width:820px; color:var(--text-dim); margin:0 0 28px;">
+    <p class="wide" style="margin:0 0 28px;">
       A short overview of SemAnCorr: the semantic&#8209;anchored correspondence problem, our training&#8209;free pipeline, and real&#8209;world manipulation skill demonstrations and transfer executions.
     </p>
     <div class="video-frame">
@@ -679,7 +657,7 @@
       <figure class="fig-card">
         <img src="assets/images/pipeline.png" alt="SemAnCorr pipeline: multi-view rendering and patch embedding, vertex embedding and clustering, pose optimization and anchor selection, sparse anchor correspondence constraining a functional map, producing dense correspondence.">
         <div class="cap">
-          <p style="margin:0; font-size:13px; color:var(--text-faint);"><span class="caption-label">Fig. 2</span>Semantic features are extracted and lifted into 3D to form clusters (red); corresponding anchors are selected via joint semantic&#8209;geometric optimization (green); anchors constrain a functional map (blue) to produce smooth, dense correspondence.</p>
+          <p style="margin:0; font-size:13px; color:var(--text-faint);">Semantic features are extracted and lifted into 3D to form clusters (red); corresponding anchors are selected via joint semantic&#8209;geometric optimization (green); anchors constrain a functional map (blue) to produce smooth, dense correspondence.</p>
         </div>
       </figure>
     </div>
@@ -713,29 +691,29 @@
           <div class="mesh-col-header no-vline">Kettle</div>
 
           <div class="mesh-row-label">Source</div>
-          <div class="mesh-cell" data-mesh="assets/meshes/in-cat-examples/scissors_ref.ply"><div class="mesh-loading">loading&hellip;</div></div>
-          <div class="mesh-cell" data-mesh="assets/meshes/in-cat-examples/plier_ref.ply"><div class="mesh-loading">loading&hellip;</div></div>
-          <div class="mesh-cell" data-mesh="assets/meshes/in-cat-examples/sunglasses_ref.ply"><div class="mesh-loading">loading&hellip;</div></div>
-          <div class="mesh-cell" data-mesh="assets/meshes/in-cat-examples/knife_ref.ply"><div class="mesh-loading">loading&hellip;</div></div>
-          <div class="mesh-cell" data-mesh="assets/meshes/in-cat-examples/suitcase_ref.ply"><div class="mesh-loading">loading&hellip;</div></div>
-          <div class="mesh-cell" data-mesh="assets/meshes/in-cat-examples/bottle_ref.ply"><div class="mesh-loading">loading&hellip;</div></div>
-          <div class="mesh-cell no-vline" data-mesh="assets/meshes/in-cat-examples/kettle_ref.ply"><div class="mesh-loading">loading&hellip;</div></div>
+          <div class="mesh-cell" data-mesh="assets/meshes/in-cat-examples/scissors_ref.ply" data-sync-group="3a-scissors"><div class="mesh-loading">loading&hellip;</div></div>
+          <div class="mesh-cell" data-mesh="assets/meshes/in-cat-examples/plier_ref.ply" data-sync-group="3a-plier"><div class="mesh-loading">loading&hellip;</div></div>
+          <div class="mesh-cell" data-mesh="assets/meshes/in-cat-examples/sunglasses_ref.ply" data-sync-group="3a-sunglasses"><div class="mesh-loading">loading&hellip;</div></div>
+          <div class="mesh-cell" data-mesh="assets/meshes/in-cat-examples/knife_ref.ply" data-sync-group="3a-knife"><div class="mesh-loading">loading&hellip;</div></div>
+          <div class="mesh-cell" data-mesh="assets/meshes/in-cat-examples/suitcase_ref.ply" data-sync-group="3a-suitcase"><div class="mesh-loading">loading&hellip;</div></div>
+          <div class="mesh-cell" data-mesh="assets/meshes/in-cat-examples/bottle_ref.ply" data-sync-group="3a-bottle"><div class="mesh-loading">loading&hellip;</div></div>
+          <div class="mesh-cell no-vline" data-mesh="assets/meshes/in-cat-examples/kettle_ref.ply" data-sync-group="3a-kettle"><div class="mesh-loading">loading&hellip;</div></div>
 
           <div class="mesh-row-label row-divider dotted">Target</div>
-          <div class="mesh-cell row-divider dotted" data-mesh="assets/meshes/in-cat-examples/scissors_corr.ply"><div class="mesh-loading">loading&hellip;</div></div>
-          <div class="mesh-cell row-divider dotted" data-mesh="assets/meshes/in-cat-examples/plier_corr.ply"><div class="mesh-loading">loading&hellip;</div></div>
-          <div class="mesh-cell row-divider dotted" data-mesh="assets/meshes/in-cat-examples/sunglasses_corr.ply"><div class="mesh-loading">loading&hellip;</div></div>
-          <div class="mesh-cell row-divider dotted" data-mesh="assets/meshes/in-cat-examples/knife_corr.ply"><div class="mesh-loading">loading&hellip;</div></div>
-          <div class="mesh-cell row-divider dotted" data-mesh="assets/meshes/in-cat-examples/suitcase_corr.ply"><div class="mesh-loading">loading&hellip;</div></div>
-          <div class="mesh-cell row-divider dotted" data-mesh="assets/meshes/in-cat-examples/bottle_corr.ply"><div class="mesh-loading">loading&hellip;</div></div>
-          <div class="mesh-cell row-divider dotted no-vline" data-mesh="assets/meshes/in-cat-examples/kettle_corr.ply"><div class="mesh-loading">loading&hellip;</div></div>
+          <div class="mesh-cell row-divider dotted" data-mesh="assets/meshes/in-cat-examples/scissors_corr.ply" data-sync-group="3a-scissors"><div class="mesh-loading">loading&hellip;</div></div>
+          <div class="mesh-cell row-divider dotted" data-mesh="assets/meshes/in-cat-examples/plier_corr.ply" data-sync-group="3a-plier"><div class="mesh-loading">loading&hellip;</div></div>
+          <div class="mesh-cell row-divider dotted" data-mesh="assets/meshes/in-cat-examples/sunglasses_corr.ply" data-sync-group="3a-sunglasses"><div class="mesh-loading">loading&hellip;</div></div>
+          <div class="mesh-cell row-divider dotted" data-mesh="assets/meshes/in-cat-examples/knife_corr.ply" data-sync-group="3a-knife"><div class="mesh-loading">loading&hellip;</div></div>
+          <div class="mesh-cell row-divider dotted" data-mesh="assets/meshes/in-cat-examples/suitcase_corr.ply" data-sync-group="3a-suitcase"><div class="mesh-loading">loading&hellip;</div></div>
+          <div class="mesh-cell row-divider dotted" data-mesh="assets/meshes/in-cat-examples/bottle_corr.ply" data-sync-group="3a-bottle"><div class="mesh-loading">loading&hellip;</div></div>
+          <div class="mesh-cell row-divider dotted no-vline" data-mesh="assets/meshes/in-cat-examples/kettle_corr.ply" data-sync-group="3a-kettle"><div class="mesh-loading">loading&hellip;</div></div>
         </div>
       </div>
       <div class="mesh-compare-hint">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;flex:none;"><path d="M9 11.5V6a1.5 1.5 0 0 1 3 0v5"/><path d="M12 11.5V4.5a1.5 1.5 0 0 1 3 0v7"/><path d="M15 11.5V6a1.5 1.5 0 0 1 3 0v7"/><path d="M6 12l.5 5c.3 3 2 5 5.5 5s5.5-2.5 5.5-6v-3"/></svg>
         Drag to rotate &middot; scroll to zoom &mdash; each panel is an independent live mesh viewer.
       </div>
-      <div class="cap"><p style="margin:0; font-size:13px; color:var(--text-faint);"><span class="caption-label">Fig. 3a</span>Within&#8209;category correspondence. Top row: source coloring. Bottom row: each vertex takes the corresponding point's color from the source, rendered as interactive 3D meshes.</p></div>
+      <div class="cap"><p style="margin:0; font-size:13px; color:var(--text-faint);">Within&#8209;category correspondence. Top row: source coloring. Bottom row: each vertex takes the corresponding point's color from the source, rendered as interactive 3D meshes.</p></div>
     </figure>
 
     <figure class="mesh-compare" style="margin-top:28px;">
@@ -748,26 +726,26 @@
           <div class="mesh-col-header">D3Fields</div>
           <div class="mesh-col-header no-vline">SemAnCorr<br>(Ours)</div>
 
-          <div class="mesh-cell" data-mesh="assets/meshes/baseline-comp/Bottle/bottle_1_ref.ply"><div class="mesh-loading">loading&hellip;</div></div>
-          <div class="mesh-cell" data-mesh="assets/meshes/baseline-comp/Bottle/bottle_2_fmwks.ply"><div class="mesh-loading">loading&hellip;</div></div>
-          <div class="mesh-cell" data-mesh="assets/meshes/baseline-comp/Bottle/bottle_2_roboabc.ply"><div class="mesh-loading">loading&hellip;</div></div>
-          <div class="mesh-cell" data-mesh="assets/meshes/baseline-comp/Bottle/bottle_2_densematcher.ply"><div class="mesh-loading">loading&hellip;</div></div>
-          <div class="mesh-cell" data-mesh="assets/meshes/baseline-comp/Bottle/bottle_2_d3fields.ply"><div class="mesh-loading">loading&hellip;</div></div>
-          <div class="mesh-cell no-vline" data-mesh="assets/meshes/baseline-comp/Bottle/bottle_2_semancorr.ply"><div class="mesh-loading">loading&hellip;</div></div>
+          <div class="mesh-cell" data-mesh="assets/meshes/baseline-comp/Bottle/bottle_1_ref.ply" data-sync-group="3b-bottle"><div class="mesh-loading">loading&hellip;</div></div>
+          <div class="mesh-cell" data-mesh="assets/meshes/baseline-comp/Bottle/bottle_2_fmwks.ply" data-sync-group="3b-bottle"><div class="mesh-loading">loading&hellip;</div></div>
+          <div class="mesh-cell" data-mesh="assets/meshes/baseline-comp/Bottle/bottle_2_roboabc.ply" data-sync-group="3b-bottle"><div class="mesh-loading">loading&hellip;</div></div>
+          <div class="mesh-cell" data-mesh="assets/meshes/baseline-comp/Bottle/bottle_2_densematcher.ply" data-sync-group="3b-bottle"><div class="mesh-loading">loading&hellip;</div></div>
+          <div class="mesh-cell" data-mesh="assets/meshes/baseline-comp/Bottle/bottle_2_d3fields.ply" data-sync-group="3b-bottle"><div class="mesh-loading">loading&hellip;</div></div>
+          <div class="mesh-cell no-vline" data-mesh="assets/meshes/baseline-comp/Bottle/bottle_2_semancorr.ply" data-sync-group="3b-bottle"><div class="mesh-loading">loading&hellip;</div></div>
 
-          <div class="mesh-cell row-divider" data-mesh="assets/meshes/baseline-comp/Plier/plier_1_ref.ply"><div class="mesh-loading">loading&hellip;</div></div>
-          <div class="mesh-cell row-divider" data-mesh="assets/meshes/baseline-comp/Plier/plier_2_fmwks.ply"><div class="mesh-loading">loading&hellip;</div></div>
-          <div class="mesh-cell row-divider" data-mesh="assets/meshes/baseline-comp/Plier/plier_2_roboabc.ply"><div class="mesh-loading">loading&hellip;</div></div>
-          <div class="mesh-cell row-divider" data-mesh="assets/meshes/baseline-comp/Plier/plier_2_densematcher.ply"><div class="mesh-loading">loading&hellip;</div></div>
-          <div class="mesh-cell row-divider" data-mesh="assets/meshes/baseline-comp/Plier/plier_2_d3fields.ply"><div class="mesh-loading">loading&hellip;</div></div>
-          <div class="mesh-cell row-divider no-vline" data-mesh="assets/meshes/baseline-comp/Plier/plier_2_semancorr.ply"><div class="mesh-loading">loading&hellip;</div></div>
+          <div class="mesh-cell row-divider" data-mesh="assets/meshes/baseline-comp/Plier/plier_1_ref.ply" data-sync-group="3b-plier"><div class="mesh-loading">loading&hellip;</div></div>
+          <div class="mesh-cell row-divider" data-mesh="assets/meshes/baseline-comp/Plier/plier_2_fmwks.ply" data-sync-group="3b-plier"><div class="mesh-loading">loading&hellip;</div></div>
+          <div class="mesh-cell row-divider" data-mesh="assets/meshes/baseline-comp/Plier/plier_2_roboabc.ply" data-sync-group="3b-plier"><div class="mesh-loading">loading&hellip;</div></div>
+          <div class="mesh-cell row-divider" data-mesh="assets/meshes/baseline-comp/Plier/plier_2_densematcher.ply" data-sync-group="3b-plier"><div class="mesh-loading">loading&hellip;</div></div>
+          <div class="mesh-cell row-divider" data-mesh="assets/meshes/baseline-comp/Plier/plier_2_d3fields.ply" data-sync-group="3b-plier"><div class="mesh-loading">loading&hellip;</div></div>
+          <div class="mesh-cell row-divider no-vline" data-mesh="assets/meshes/baseline-comp/Plier/plier_2_semancorr.ply" data-sync-group="3b-plier"><div class="mesh-loading">loading&hellip;</div></div>
         </div>
       </div>
       <div class="mesh-compare-hint">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;flex:none;"><path d="M9 11.5V6a1.5 1.5 0 0 1 3 0v5"/><path d="M12 11.5V4.5a1.5 1.5 0 0 1 3 0v7"/><path d="M15 11.5V6a1.5 1.5 0 0 1 3 0v7"/><path d="M6 12l.5 5c.3 3 2 5 5.5 5s5.5-2.5 5.5-6v-3"/></svg>
         Drag to rotate &middot; scroll to zoom &mdash; each panel is an independent live mesh viewer.
       </div>
-      <div class="cap"><p style="margin:0; font-size:13px; color:var(--text-faint);"><span class="caption-label">Fig. 3b</span>Baseline comparison. Source coloring on the left; corresponded colorings on the right for each method, rendered as interactive 3D meshes.</p></div>
+      <div class="cap"><p style="margin:0; font-size:13px; color:var(--text-faint);">Baseline comparison. Source coloring on the left; corresponded colorings on the right for each method, rendered as interactive 3D meshes.</p></div>
     </figure>
 
     <div class="table-wrap" style="margin-top:44px;">
@@ -784,7 +762,7 @@
         </tbody>
       </table>
     </div>
-    <p class="table-note">Table&nbsp;I &mdash; Within&#8209;category semantic accuracy (sAcc &plusmn; std, %). SemAnCorr improves 6.2 points over the strongest baseline, D3Fields.</p>
+    <p class="table-note">Within&#8209;category semantic accuracy (sAcc &plusmn; std, %). SemAnCorr improves 6.2 points over the strongest baseline, D3Fields.</p>
 
     <div class="grid-2" style="margin-top:44px;">
       <div>
@@ -800,7 +778,7 @@
             </tbody>
           </table>
         </div>
-        <p class="table-note">Table&nbsp;II &mdash; Geometric Coherence Score (GCS), the harmonic mean of continuity and coverage. FM&#8209;WKS's high continuity comes from collapsing correspondence onto a handful of vertices; SemAnCorr is the only method with both high continuity and broad coverage.</p>
+        <p class="table-note">Geometric Coherence Score (GCS), the harmonic mean of continuity and coverage. FM&#8209;WKS's high continuity comes from collapsing correspondence onto a handful of vertices; SemAnCorr is the only method with both high continuity and broad coverage.</p>
       </div>
 
       <div class="eq-card">
@@ -831,19 +809,19 @@
             <div class="mesh-col-header no-vline">Target</div>
 
             <div class="mesh-row-label">Scissors &rarr; Pliers</div>
-            <div class="mesh-cell" data-mesh="assets/meshes/cross-cat-examples/scissors_ref.ply"><div class="mesh-loading">loading&hellip;</div></div>
-            <div class="mesh-cell no-vline" data-mesh="assets/meshes/cross-cat-examples/pliers_corr.ply"><div class="mesh-loading">loading&hellip;</div></div>
+            <div class="mesh-cell" data-mesh="assets/meshes/cross-cat-examples/scissors_ref.ply" data-sync-group="4-scissors-pliers"><div class="mesh-loading">loading&hellip;</div></div>
+            <div class="mesh-cell no-vline" data-mesh="assets/meshes/cross-cat-examples/pliers_corr.ply" data-sync-group="4-scissors-pliers" data-preroll="-90"><div class="mesh-loading">loading&hellip;</div></div>
 
             <div class="mesh-row-label row-divider">Kettle &rarr; Bottle</div>
-            <div class="mesh-cell row-divider" data-mesh="assets/meshes/cross-cat-examples/kettle_ref.ply"><div class="mesh-loading">loading&hellip;</div></div>
-            <div class="mesh-cell row-divider no-vline" data-mesh="assets/meshes/cross-cat-examples/bottle_corr.ply"><div class="mesh-loading">loading&hellip;</div></div>
+            <div class="mesh-cell row-divider" data-mesh="assets/meshes/cross-cat-examples/kettle_ref.ply" data-sync-group="4-kettle-bottle"><div class="mesh-loading">loading&hellip;</div></div>
+            <div class="mesh-cell row-divider no-vline" data-mesh="assets/meshes/cross-cat-examples/bottle_corr.ply" data-sync-group="4-kettle-bottle"><div class="mesh-loading">loading&hellip;</div></div>
           </div>
         </div>
         <div class="mesh-compare-hint">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;flex:none;"><path d="M9 11.5V6a1.5 1.5 0 0 1 3 0v5"/><path d="M12 11.5V4.5a1.5 1.5 0 0 1 3 0v7"/><path d="M15 11.5V6a1.5 1.5 0 0 1 3 0v7"/><path d="M6 12l.5 5c.3 3 2 5 5.5 5s5.5-2.5 5.5-6v-3"/></svg>
           Drag to rotate &middot; scroll to zoom &mdash; each panel is an independent live mesh viewer.
         </div>
-        <figcaption><span class="caption-label">Fig. 4</span>Cross&#8209;category correspondence: Scissors &rarr; Pliers (top), Kettle &rarr; Bottle (bottom), rendered as interactive 3D meshes.</figcaption>
+        <figcaption>Cross&#8209;category correspondence: Scissors &rarr; Pliers (top), Kettle &rarr; Bottle (bottom), rendered as interactive 3D meshes.</figcaption>
       </figure>
 
       <div>
@@ -859,10 +837,10 @@
             </tbody>
           </table>
         </div>
-        <p class="table-note">Table&nbsp;III &mdash; Cross&#8209;category semantic accuracy (sAcc &plusmn; std, %).</p>
+        <p class="table-note">Cross&#8209;category semantic accuracy (sAcc &plusmn; std, %).</p>
         <figure class="fig-card" style="margin-top:28px;">
           <img src="assets/images/anchor-confidence.png" alt="Category-level anchor confidence matrix, showing highest confidence along the diagonal and elevated confidence between functionally related categories such as containers and hand tools.">
-          <div class="cap"><p style="margin:0; font-size:13px; color:var(--text-faint);"><span class="caption-label">Fig. 5</span>Category&#8209;level anchor confidence. Within&#8209;category pairs (diagonal) score highest; functionally related categories &mdash; containers, hand tools, appliances &mdash; score relatively higher than unrelated ones, even without any comparable baseline metric.</p></div>
+          <div class="cap"><p style="margin:0; font-size:13px; color:var(--text-faint);">Category&#8209;level anchor confidence. Within&#8209;category pairs (diagonal) score highest; functionally related categories &mdash; containers, hand tools, appliances &mdash; score relatively higher than unrelated ones, even without any comparable baseline metric.</p></div>
         </figure>
       </div>
     </div>
@@ -888,7 +866,7 @@
             </tbody>
           </table>
         </div>
-        <p class="table-note">Table&nbsp;IV &mdash; Removing anchor selection causes the largest drop in semantic accuracy; removing semantic clustering most damages geometric coherence.</p>
+        <p class="table-note">Removing anchor selection causes the largest drop in semantic accuracy; removing semantic clustering most damages geometric coherence.</p>
         <div class="cross-note">
           <div><strong>Clustering</strong>Suppresses noisy lifted features before correspondence estimation &mdash; without it, geometric coherence collapses.</div>
           <div><strong>Anchor selection</strong>Determines <em>where</em> manipulation should transfer &mdash; without it, semantic accuracy drops the most.</div>
@@ -898,23 +876,23 @@
       <figure class="mesh-compare">
         <div class="mesh-compare-scroll">
           <div class="mesh-compare-grid" style="--cols:4">
-            <div class="mesh-cell" style="grid-column:span 2; grid-row:span 2;" data-mesh="assets/meshes/ablation/kettle_ref.ply">
+            <div class="mesh-cell" style="grid-column:span 2; grid-row:span 2;" data-mesh="assets/meshes/ablation/kettle_ref.ply" data-sync-group="6-ablation">
               <div class="mesh-loading">loading&hellip;</div>
               <div class="mesh-cell-tag">Source Object<br>Coloring</div>
             </div>
-            <div class="mesh-cell" data-mesh="assets/meshes/ablation/cup_semancorr.ply" data-colors="assets/meshes/ablation/cup_no_clustering.colors.bin">
+            <div class="mesh-cell" data-mesh="assets/meshes/ablation/cup_semancorr.ply" data-colors="assets/meshes/ablation/cup_no_clustering.colors.bin" data-sync-group="6-ablation" data-preroll="180">
               <div class="mesh-loading">loading&hellip;</div>
               <div class="mesh-cell-tag">w/o Semantic<br>Clustering</div>
             </div>
-            <div class="mesh-cell" data-mesh="assets/meshes/ablation/cup_semancorr.ply" data-colors="assets/meshes/ablation/cup_no_anchor.colors.bin">
+            <div class="mesh-cell" data-mesh="assets/meshes/ablation/cup_semancorr.ply" data-colors="assets/meshes/ablation/cup_no_anchor.colors.bin" data-sync-group="6-ablation" data-preroll="180">
               <div class="mesh-loading">loading&hellip;</div>
               <div class="mesh-cell-tag">w/o Anchor<br>Selection</div>
             </div>
-            <div class="mesh-cell row-divider" data-mesh="assets/meshes/ablation/cup_semancorr.ply" data-colors="assets/meshes/ablation/cup_no_fm.colors.bin">
+            <div class="mesh-cell row-divider" data-mesh="assets/meshes/ablation/cup_semancorr.ply" data-colors="assets/meshes/ablation/cup_no_fm.colors.bin" data-sync-group="6-ablation" data-preroll="180">
               <div class="mesh-loading">loading&hellip;</div>
               <div class="mesh-cell-tag">w/o Functional<br>Map</div>
             </div>
-            <div class="mesh-cell row-divider" data-mesh="assets/meshes/ablation/cup_semancorr.ply">
+            <div class="mesh-cell row-divider" data-mesh="assets/meshes/ablation/cup_semancorr.ply" data-sync-group="6-ablation" data-preroll="180">
               <div class="mesh-loading">loading&hellip;</div>
               <div class="mesh-cell-tag">SemAnCorr<br>(Ours)</div>
             </div>
@@ -924,7 +902,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;flex:none;"><path d="M9 11.5V6a1.5 1.5 0 0 1 3 0v5"/><path d="M12 11.5V4.5a1.5 1.5 0 0 1 3 0v7"/><path d="M15 11.5V6a1.5 1.5 0 0 1 3 0v7"/><path d="M6 12l.5 5c.3 3 2 5 5.5 5s5.5-2.5 5.5-6v-3"/></svg>
           Drag to rotate &middot; scroll to zoom &mdash; each panel is an independent live mesh viewer.
         </div>
-        <div class="cap"><p style="margin:0; font-size:13px; color:var(--text-faint);"><span class="caption-label">Fig. 6</span>Source object (left) and target correspondence under each ablation: w/o semantic clustering, w/o anchor selection, w/o functional map, and the full pipeline, rendered as interactive 3D meshes.</p></div>
+        <div class="cap"><p style="margin:0; font-size:13px; color:var(--text-faint);">Source object (left) and target correspondence under each ablation: w/o semantic clustering, w/o anchor selection, w/o functional map, and the full pipeline, rendered as interactive 3D meshes.</p></div>
       </figure>
     </div>
   </div>
@@ -940,19 +918,10 @@
 
     <figure style="margin-top:30px;">
       <img src="assets/images/real-world.png" alt="Real-world manipulation transfer across five tasks: banana peeling, pen opening, kettle pouring, bottle twisting, and scissor cutting, showing observations, correspondences, and execution key frames.">
-      <figcaption><span class="caption-label">Fig. 7</span>For each task, a skill demonstrated on a source object (left) is transferred to a semantically related target object (right) via the computed dense correspondence (second row); remaining rows show key frames of the source demonstration and the transferred execution.</figcaption>
+      <figcaption>For each task, a skill demonstrated on a source object (left) is transferred to a semantically related target object (right) via the computed dense correspondence (second row); remaining rows show key frames of the source demonstration and the transferred execution.</figcaption>
     </figure>
 
-    <div class="task-list">
-      <div class="task-row"><span class="n">01</span><span class="desc">Banana peeling &rarr; another banana</span><span class="score"><span>D3Fields <b>7/10</b></span><span>SemAnCorr <b>8/10</b></span></span></div>
-      <div class="task-row"><span class="n">02</span><span class="desc">Pen opening &rarr; marker</span><span class="score"><span>D3Fields <b>9/10</b></span><span>SemAnCorr <b>9/10</b></span></span></div>
-      <div class="task-row"><span class="n">03</span><span class="desc">Kettle pouring &rarr; toy cup</span><span class="score"><span>D3Fields <b>3/10</b></span><span>SemAnCorr <b>7/10</b></span></span></div>
-      <div class="task-row"><span class="n">04</span><span class="desc">Bottle twist&#8209;opening &rarr; another bottle</span><span class="score"><span>D3Fields <b>1/10</b></span><span>SemAnCorr <b>7/10</b></span></span></div>
-      <div class="task-row"><span class="n">05</span><span class="desc">Scissor cutting &rarr; nail clipper</span><span class="score"><span>D3Fields <b>3/10</b></span><span>SemAnCorr <b>6/10</b></span></span></div>
-    </div>
-    <p class="table-note">Table&nbsp;V &mdash; Real&#8209;world task success rate, 10 trials per task with varied object pose and viewpoint.</p>
-
-    <div class="video-frame" style="margin-top:34px;">
+    <div class="video-frame" style="margin-top:30px;">
       <video id="task-clip-video" controls muted playsinline preload="auto" poster="assets/images/teaser.png" data-default-start="93" data-default-end="135">
         <source src="assets/videos/semancorr_demo.mp4" type="video/mp4">
         Your browser does not support embedded video. <a href="assets/videos/semancorr_demo.mp4">Download the video</a> instead.
@@ -966,17 +935,36 @@
       <button type="button" class="pill" data-start="129" data-end="135">Task 5: Scissor Cutting</button>
     </div>
 
-    <div class="grid-2" style="margin-top:48px;">
-      <figure class="fig-card">
-        <img src="assets/images/realworld-correspondence.png" alt="SemAnCorr real-world object correspondence for all five tasks.">
-        <div class="cap"><p style="margin:0; font-size:13px; color:var(--text-faint);"><span class="caption-label">Fig. 8a</span>SemAnCorr correspondence on real&#8209;world object pairs, Tasks 1&ndash;5.</p></div>
-      </figure>
-      <figure class="fig-card">
-        <img src="assets/images/d3fields-failure.png" alt="D3Fields failure cases on Task 3 and Task 4, showing spatially incoherent correspondence leading to incorrect local frames.">
-        <div class="cap"><p style="margin:0; font-size:13px; color:var(--text-faint);"><span class="caption-label">Fig. 8b</span>D3Fields fails on Tasks 3 &amp; 4: spatially incoherent correspondence yields incorrect local frames, causing task failure.</p></div>
-      </figure>
+    <div class="grid-2" style="margin-top:40px;">
+      <div>
+        <div class="table-wrap roomy">
+          <table style="min-width:0;">
+            <thead><tr><th>Task</th><th>D3Fields</th><th>SemAnCorr</th></tr></thead>
+            <tbody>
+              <tr><td>Task 1: Banana Peeling</td><td>7/10</td><td class="best-val">8/10</td></tr>
+              <tr><td>Task 2: Pen Cap Opening</td><td>9/10</td><td class="best-val">9/10</td></tr>
+              <tr><td>Task 3: Kettle Pouring</td><td>3/10</td><td class="best-val">7/10</td></tr>
+              <tr><td>Task 4: Bottle Twisting</td><td>1/10</td><td class="best-val">7/10</td></tr>
+              <tr><td>Task 5: Scissor Cutting</td><td>3/10</td><td class="best-val">6/10</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">Real&#8209;world task success rate, 10 trials per task with varied object pose and viewpoint.</p>
+      </div>
+
+      <div>
+        <figure class="fig-card">
+          <img src="assets/images/realworld-correspondence.png" alt="SemAnCorr real-world object correspondence for all five tasks.">
+          <div class="cap"><p style="margin:0; font-size:13px; color:var(--text-faint);">SemAnCorr correspondence on real&#8209;world object pairs, Tasks 1&ndash;5.</p></div>
+        </figure>
+        <figure class="fig-card" style="margin-top:20px;">
+          <img src="assets/images/d3fields-failure.png" alt="D3Fields failure cases on Task 3 and Task 4, showing spatially incoherent correspondence leading to incorrect local frames.">
+          <div class="cap"><p style="margin:0; font-size:13px; color:var(--text-faint);">D3Fields fails on Tasks 3 &amp; 4: spatially incoherent correspondence yields incorrect local frames, causing task failure.</p></div>
+        </figure>
+      </div>
     </div>
-    <p style="margin-top:26px; max-width:760px;">Both methods perform comparably on simpler tasks where the correct interaction region is relatively unambiguous. On tasks that additionally require preserving a local geometric frame &mdash; approach direction, end&#8209;effector orientation &mdash; D3Fields' spatially incoherent correspondence produces erroneous frames despite often identifying the correct semantic region. SemAnCorr's remaining failures stem mainly from mesh&#8209;to&#8209;workspace alignment error rather than correspondence estimation.</p>
+
+    <p class="wide" style="margin-top:26px;">Both methods perform comparably on simpler tasks where the correct interaction region is relatively unambiguous. On tasks that additionally require preserving a local geometric frame &mdash; approach direction, end&#8209;effector orientation &mdash; D3Fields' spatially incoherent correspondence produces erroneous frames despite often identifying the correct semantic region. SemAnCorr's remaining failures stem mainly from mesh&#8209;to&#8209;workspace alignment error rather than correspondence estimation.</p>
   </div>
 </section>
 
@@ -1062,6 +1050,19 @@
 
     const loader = new PLYLoader();
     const viewers = [];
+    const syncGroups = new Map();
+
+    // Shared scratch objects for converting a camera's position (relative to
+    // its own OrbitControls target) into spherical angles, so we can measure
+    // how far a viewer has been rotated this frame and replay that same
+    // delta onto its "linked" viewers (see data-sync-group below).
+    const _tmpOffset = new THREE.Vector3();
+    const _tmpSpherical = new THREE.Spherical();
+    function getSpherical(v){
+      _tmpOffset.copy(v.camera.position).sub(v.controls.target);
+      _tmpSpherical.setFromVector3(_tmpOffset);
+      return { theta: _tmpSpherical.theta, phi: _tmpSpherical.phi, radius: _tmpSpherical.radius };
+    }
 
     // Some cells share identical geometry and only swap per-vertex colors
     // (e.g. ablation variants) — cache the parsed geometry per URL so it's
@@ -1119,9 +1120,19 @@
       controls.minDistance = 0.6;
       controls.maxDistance = 6;
 
-      const viewer = { cell, scene, camera, controls, mesh:null, spinning:true, aspect:0 };
-      controls.addEventListener('start', () => { viewer.spinning = false; });
+      const group = cell.dataset.syncGroup || null;
+      const viewer = { cell, scene, camera, controls, mesh:null, spinning:true, aspect:0, group };
+      controls.addEventListener('start', () => {
+        viewer.spinning = false;
+        if (group){
+          (syncGroups.get(group) || []).forEach(gv => { gv.spinning = false; });
+        }
+      });
       viewers.push(viewer);
+      if (group){
+        if (!syncGroups.has(group)) syncGroups.set(group, []);
+        syncGroups.get(group).push(viewer);
+      }
 
       loadCellGeometry(cell).then(geometry => {
         const radius = Math.max(geometry.boundingSphere.radius, 0.001);
@@ -1130,6 +1141,8 @@
           vertexColors:true, roughness:0.85, metalness:0.05, side:THREE.DoubleSide
         });
         viewer.mesh = new THREE.Mesh(geometry, material);
+        const prerollDeg = parseFloat(cell.dataset.preroll || '0');
+        if (prerollDeg) viewer.mesh.rotation.y = THREE.MathUtils.degToRad(prerollDeg);
         scene.add(viewer.mesh);
 
         camera.position.set(radius * 2.0, radius * 1.5, radius * 2.5);
@@ -1156,11 +1169,8 @@
       const canvasHeight = renderer.domElement.clientHeight;
       const canvasWidth = renderer.domElement.clientWidth;
 
-      renderer.setScissorTest(false);
-      renderer.setViewport(0, 0, canvasWidth, canvasHeight);
-      renderer.clear(true, true, true);
-      renderer.setScissorTest(true);
-
+      // Pass 1: advance auto-spin/damping for every visible viewer.
+      const visible = [];
       for (const v of viewers){
         if (!v.mesh) continue;
         const rect = v.cell.getBoundingClientRect();
@@ -1178,6 +1188,52 @@
         if (v.spinning) v.mesh.rotation.y += 0.004;
         v.controls.update();
 
+        visible.push({ v, rect });
+      }
+
+      // Pass 2: linked rotation. Dragging (or momentum-damping) any viewer in
+      // a data-sync-group replays the same theta/phi delta onto its group
+      // siblings, so paired/grouped viewers always stay rotated in lockstep.
+      const groupDeltas = new Map();
+      for (const { v } of visible){
+        if (!v.group) continue;
+        const sph = getSpherical(v);
+        if (v._prevTheta === undefined){
+          v._prevTheta = sph.theta;
+          v._prevPhi = sph.phi;
+          continue;
+        }
+        const dTheta = sph.theta - v._prevTheta;
+        const dPhi = sph.phi - v._prevPhi;
+        v._prevTheta = sph.theta;
+        v._prevPhi = sph.phi;
+        if (Math.abs(dTheta) < 1e-5 && Math.abs(dPhi) < 1e-5) continue;
+        const acc = groupDeltas.get(v.group) || { dTheta: 0, dPhi: 0, movers: new Set() };
+        acc.dTheta += dTheta;
+        acc.dPhi += dPhi;
+        acc.movers.add(v);
+        groupDeltas.set(v.group, acc);
+      }
+      for (const [group, { dTheta, dPhi, movers }] of groupDeltas){
+        for (const gv of (syncGroups.get(group) || [])){
+          if (movers.has(gv) || !gv.mesh) continue;
+          const sph = getSpherical(gv);
+          const theta = sph.theta + dTheta;
+          const phi = Math.min(Math.max(sph.phi + dPhi, 1e-4), Math.PI - 1e-4);
+          gv.camera.position.setFromSphericalCoords(sph.radius, phi, theta).add(gv.controls.target);
+          gv.camera.lookAt(gv.controls.target);
+          gv._prevTheta = theta;
+          gv._prevPhi = phi;
+        }
+      }
+
+      renderer.setScissorTest(false);
+      renderer.setViewport(0, 0, canvasWidth, canvasHeight);
+      renderer.clear(true, true, true);
+      renderer.setScissorTest(true);
+
+      for (const { v, rect } of visible){
+        const w = rect.width, h = rect.height;
         const left = rect.left, bottom = window.innerHeight - rect.bottom;
         renderer.setViewport(left, bottom, w, h);
         renderer.setScissor(left, bottom, w, h);
