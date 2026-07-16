@@ -358,6 +358,8 @@
     background:var(--surface);
   }
   .fig-card img{ border-radius:0; }
+  .fig-card object.pdf-embed{ display:block; width:100%; border:none; background:#fff; }
+  .fig-card object.pdf-embed .pdf-fallback{ margin:0; padding:16px 18px; font-size:13px; color:var(--text-dim); }
   .fig-card .cap{ padding:16px 18px; }
 
   /* interactive mesh comparison */
@@ -839,8 +841,10 @@
         </div>
         <p class="table-note">Cross&#8209;category semantic accuracy (sAcc &plusmn; std, %).</p>
         <figure class="fig-card" style="margin-top:28px;">
-          <img src="assets/images/anchor-confidence.png" alt="Category-level anchor confidence matrix, showing highest confidence along the diagonal and elevated confidence between functionally related categories such as containers and hand tools.">
-          <div class="cap"><p style="margin:0; font-size:13px; color:var(--text-faint);">Category&#8209;level anchor confidence. Within&#8209;category pairs (diagonal) score highest; functionally related categories &mdash; containers, hand tools, appliances &mdash; score relatively higher than unrelated ones, even without any comparable baseline metric.</p></div>
+          <object class="pdf-embed" type="application/pdf" data="assets/images/anchor-confidence.pdf" style="aspect-ratio:1137.67/615.952;" aria-label="Category-level anchor confidence matrix, showing highest confidence along the diagonal and elevated confidence between functionally related categories such as containers and hand tools.">
+            <p class="pdf-fallback">Your browser can&rsquo;t display the embedded PDF. <a href="assets/images/anchor-confidence.pdf">Open the anchor confidence figure (PDF)</a> instead.</p>
+          </object>
+          <div class="cap"><p style="margin:0; font-size:13px; color:var(--text-faint);">Category&#8209;level anchor confidence. Within&#8209;category pairs (diagonal) score highest; functionally related categories &mdash; containers, hand tools, appliances &mdash; score relatively higher than unrelated ones, even without any comparable baseline metric. Rendered as a vector PDF &mdash; text and values are selectable.</p></div>
         </figure>
       </div>
     </div>
@@ -1191,9 +1195,10 @@
         visible.push({ v, rect });
       }
 
-      // Pass 2: linked rotation. Dragging (or momentum-damping) any viewer in
-      // a data-sync-group replays the same theta/phi delta onto its group
-      // siblings, so paired/grouped viewers always stay rotated in lockstep.
+      // Pass 2: linked rotation + zoom. Dragging (or momentum-damping) any
+      // viewer in a data-sync-group replays the same theta/phi delta, and
+      // scrolling to zoom replays the same radius ratio, onto its group
+      // siblings — so paired/grouped viewers stay rotated AND zoomed in lockstep.
       const groupDeltas = new Map();
       for (const { v } of visible){
         if (!v.group) continue;
@@ -1201,29 +1206,37 @@
         if (v._prevTheta === undefined){
           v._prevTheta = sph.theta;
           v._prevPhi = sph.phi;
+          v._prevRadius = sph.radius;
           continue;
         }
         const dTheta = sph.theta - v._prevTheta;
         const dPhi = sph.phi - v._prevPhi;
+        const radiusRatio = sph.radius / v._prevRadius;
         v._prevTheta = sph.theta;
         v._prevPhi = sph.phi;
-        if (Math.abs(dTheta) < 1e-5 && Math.abs(dPhi) < 1e-5) continue;
-        const acc = groupDeltas.get(v.group) || { dTheta: 0, dPhi: 0, movers: new Set() };
+        v._prevRadius = sph.radius;
+        const rotated = Math.abs(dTheta) > 1e-5 || Math.abs(dPhi) > 1e-5;
+        const zoomed = Math.abs(radiusRatio - 1) > 1e-4;
+        if (!rotated && !zoomed) continue;
+        const acc = groupDeltas.get(v.group) || { dTheta: 0, dPhi: 0, radiusRatio: 1, movers: new Set() };
         acc.dTheta += dTheta;
         acc.dPhi += dPhi;
+        acc.radiusRatio *= radiusRatio;
         acc.movers.add(v);
         groupDeltas.set(v.group, acc);
       }
-      for (const [group, { dTheta, dPhi, movers }] of groupDeltas){
+      for (const [group, { dTheta, dPhi, radiusRatio, movers }] of groupDeltas){
         for (const gv of (syncGroups.get(group) || [])){
           if (movers.has(gv) || !gv.mesh) continue;
           const sph = getSpherical(gv);
           const theta = sph.theta + dTheta;
           const phi = Math.min(Math.max(sph.phi + dPhi, 1e-4), Math.PI - 1e-4);
-          gv.camera.position.setFromSphericalCoords(sph.radius, phi, theta).add(gv.controls.target);
+          const radius = Math.min(Math.max(sph.radius * radiusRatio, gv.controls.minDistance), gv.controls.maxDistance);
+          gv.camera.position.setFromSphericalCoords(radius, phi, theta).add(gv.controls.target);
           gv.camera.lookAt(gv.controls.target);
           gv._prevTheta = theta;
           gv._prevPhi = phi;
+          gv._prevRadius = radius;
         }
       }
 
